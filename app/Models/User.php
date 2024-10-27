@@ -11,7 +11,6 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
     protected $fillable = [
-        'username',
         'email',
         'password',
     ];
@@ -26,4 +25,8 @@ class User extends Authenticatable
         ];
     }
     public $timestamps = true;
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
 }

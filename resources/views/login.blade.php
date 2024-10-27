@@ -27,8 +27,15 @@
                         class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring focus:ring-blue-500 bg-gray-700 text-white placeholder-gray-400">
                 </div>
                 <div class="mb-4">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember" class="text-gray-300">Remember Me</label>
+                </div>  
+                <div class="mb-4">
                     <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-500 rounded-md text-white font-semibold">Login</button>
-                </div>
+                </div>              
+                @if ($errors->has('loginError'))
+                    <div class="text-red-500 mb-4">{{ $errors->first('loginError') }}</div>
+                @endif
                 <div id="forgotPasswordLink" class="text-center">
                     <a href="#" class="text-gray-400 hover:text-gray-300">Forgot your password?</a>
                 </div>
@@ -37,11 +44,6 @@
             <h2 id="formTitle" class="text-2xl font-bold text-center text-white mb-4">Register</h2>
             <form id="authForm" action="{{ route('register') }}" method="POST">
                 @csrf
-                <div id="usernameField" class="mb-4">
-                    <label for="username" class="block text-gray-300">Username</label>
-                    <input type="text" id="username" name="username"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring focus:ring-blue-500 bg-gray-700 text-white placeholder-gray-400">
-                </div>
                 <div id="emailField" class="mb-4">
                     <label for="email" class="block text-gray-300">Email</label>
                     <input type="email" id="email" name="email" required

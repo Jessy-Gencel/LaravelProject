@@ -5,6 +5,17 @@
 /public/storage
 /storage/*.key
 /storage/pail
+/storage/*.*
+!/storage/.gitignore
+/storage/app/*
+/storage/app/public/*
+/storage/framework/*
+!/storage/framework/cache
+!/storage/framework/sessions
+!/storage/framework/testing
+!/storage/framework/views
+/storage/logs/*
+!/storage/logs/.gitignore
 /vendor
 .env
 .env.backup

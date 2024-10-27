@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Profile;
+use Illuminate\Support\Str;
 
 
 class AuthController extends Controller
@@ -17,7 +20,21 @@ class AuthController extends Controller
     }
     public function login(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+        $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember');
+        if (Auth::attempt($credentials, $remember)) {
+            return redirect()->route('home')->with('success', 'Login successful!');
+        } else {
+            return redirect()->back()->withErrors([
+                'loginError' => 'The provided credentials are incorrect.'
+            ]);
+        }
     }
+
     public function showRegistrationForm()
     {
         return view('login',['pageType' => 'register']);
@@ -26,7 +43,6 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'username' => 'required|string|min:3|max:50',
             'email' => 'required|email|unique:users,email',
             'password' => [
                 'required',
@@ -46,13 +62,16 @@ class AuthController extends Controller
         }
         $hashedPassword = Hash::make($request->input('password'));
         $userData = [
-            'username' => $request->input('username'),
             'email' => $request->input('email'),
             'password' => $hashedPassword,
         ];
         $user = User::create($userData);
         $user->created_at = now();
         $user->save();
+
+        $user->profile()->create([
+            'username' => Str::random(12), 
+        ]);
         return redirect()->route('home')->with('success', 'Registration successful!');
     }
 }
