@@ -3,8 +3,6 @@
 @section('content')
 @if($pageType == 'register')
     @vite('resources/js/validateRegistration.js')
-@elseif ($pageType == 'login')
-    @vite('resources/js/validateLogin.js')
 @endif
 <div class="flex items-center justify-center bg-gray-900 h-full flex-grow">
     <div class="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-sm">

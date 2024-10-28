@@ -8,3 +8,6 @@ body {
     display: flex;
     min-height: screen;
 }
+.black{
+    color: black;
+}
