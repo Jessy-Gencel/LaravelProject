@@ -5,6 +5,8 @@ use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\FaqController;
+use App\Http\Controllers\ContactController;
 
 
 
@@ -19,5 +21,12 @@ Route::post('/upload', [FileUploadController::class, 'uploadFile'])->name('uploa
 Route::get('/profile', [ProfileController::class, 'show'])->name('profile')->middleware('auth');
 Route::post('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit')->middleware('auth');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/faq', [FaqController::class, 'index'])->name('faq');
+Route::get('/addQuestion', [FAQController::class, 'showAddQuestionForm'])->name('addQuestion');
+Route::post('/addQuestion', [FAQController::class, 'storeQuestion'])->name('saveFAQ');
+Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
+
+
 
 
