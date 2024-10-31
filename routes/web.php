@@ -7,6 +7,7 @@ use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\NewsController;
 
 
 
@@ -26,7 +27,14 @@ Route::get('/addQuestion', [FAQController::class, 'showAddQuestionForm'])->name(
 Route::post('/addQuestion', [FAQController::class, 'storeQuestion'])->name('saveFAQ');
 Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
-
+Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+Route::get('/news/create', [NewsController::class, 'create'])->name('news.create')->middleware('auth');
+Route::post('/news', [NewsController::class, 'store'])->name('news.store')->middleware('auth');
+Route::post('/news', [NewsController::class, 'update'])->name('news.update')->middleware('auth');
+Route::delete('/news/{id}', [NewsController::class, 'destroy'])->name('news.destroy')->middleware('auth');
+Route::post('/news/comments', [NewsController::class, 'storeComment'])->name('news.comments.store')->middleware('auth');
+Route::delete('/news/comments/{id}', [NewsController::class, 'destroyComment'])->name('news.comments.destroy')->middleware('auth');
+Route::post('/news/comments/{id}', [NewsController::class, 'updateComment'])->name('news.comments.update')->middleware('auth');
 
 
 

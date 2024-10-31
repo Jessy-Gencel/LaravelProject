@@ -11,3 +11,6 @@ body {
 .black{
     color: black;
 }
+[x-cloak] {
+    display: none !important;
+}

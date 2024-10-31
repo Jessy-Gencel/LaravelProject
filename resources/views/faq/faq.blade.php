@@ -1,7 +1,7 @@
 @extends('layouts.pageWithHeaderAndFooter')
 
 @section('content')
-<div class="container mx-auto py-8">
+<div id="faq_page" class="container mx-auto py-8" hidden>
     <h1 class="text-2xl font-bold mb-6">Frequently Asked Questions</h1>
     @foreach($faqs->groupBy('category') as $category => $faqsInCategory)
         <div x-data="{ openCategory: false }" class="border rounded-lg p-4 mb-8 shadow-md bg-gray-800 border-gray-700">
@@ -44,4 +44,5 @@
         @endif
     </div>
 </div>
+@vite('resources/js/alpineLoadingWorkarounds/loadFAQS.js')
 @endsection
