@@ -14,3 +14,10 @@ body {
 [x-cloak] {
     display: none !important;
 }
+.max-w-800 {
+    max-width: 700px;
+}
+
+.max-h-800 {
+    max-height: 700px;
+}

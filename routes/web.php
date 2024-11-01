@@ -8,6 +8,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\GameLogic\GameController;
+
 
 
 
@@ -35,6 +37,8 @@ Route::delete('/news/{id}', [NewsController::class, 'destroy'])->name('news.dest
 Route::post('/news/comments', [NewsController::class, 'storeComment'])->name('news.comments.store')->middleware('auth');
 Route::delete('/news/comments/{id}', [NewsController::class, 'destroyComment'])->name('news.comments.destroy')->middleware('auth');
 Route::post('/news/comments/{id}', [NewsController::class, 'updateComment'])->name('news.comments.update')->middleware('auth');
+Route::post('/upload-image', [HomeController::class, 'uploadImage'])->name('upload.image');
+Route::get('/game', [GameController::class, 'index'])->name('game.index');
 
 
 
