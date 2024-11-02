@@ -1,27 +1,77 @@
 import Phaser from 'phaser';
+import {loadTowers} from './towerLoad.js';
+
+const numRows = 5;
+const numCols = 9;
+const startOffsetx = 150; 
+const startOffsety = 150;
+const bottomOffset = 50;
+const rightOffset = 50;
+const availableWidth = window.innerWidth - startOffsetx - rightOffset; 
+const squareWidth = availableWidth / numCols; 
+const squareHeight = (window.innerHeight - startOffsety - bottomOffset)/ numRows; 
+
+
+
 
 class MyGame extends Phaser.Scene {
     constructor() {
         super({ key: 'MyGame' ,debug: true});
         this.background = null; 
-        this.gridLines = [];
-        this.towers = [
-            { name: 'basicTower', image: 'storage/assets/towers/basicTower.png', price: 100 }, 
-            { name: 'combustionTower', image: 'storage/assets/towers/combustionTower.png', price: 150 },
-        ]
+        this.gridCells = [];
+        this.towers = [];
+        this.currency = 0;
+        this.placedTowers = [];
+        this.enemies = [];
+        this.spawnedEnemies = 0;
+        this.selectedTower = null;
     }
 
     preload() {
         this.load.image('background', 'storage/assets/env/background.png');
-        this.load.image('basicTower', 'storage/assets/towers/basicTower.png'); 
-        this.load.image('combustionTower', 'storage/assets/towers/combustionTower.png');
         this.load.image('currencyIconKey', 'storage/assets/misc/money.png');
+        loadTowers.call(this).then((towers) => {
+            this.towers = towers;
+            this.towers.forEach(tower => {
+            this.load.image(tower.name, tower.sprite_image);
+            console.log(tower.sprite_image);
+            this.load.image(`${tower.name}_projectile`, tower.projectile_image);
+            });
+            this.load.start(); 
+        });
     }
 
     create() {
-        this.setBackground(this);
-        this.makeGrid(this); 
-        this.createTowerSelectionUI(this);
+        this.load.on('complete', () => {
+            this.createTowerSelectionUI();
+        });
+        this.setBackground();
+        this.makeGrid(); 
+        this.gridCells = Array.from({ length: numRows }, () => Array(numCols).fill({ occupied: false }));
+        this.input.on('pointerdown', (pointer) => {
+            if (!this.selectedTower) return;
+            const col = Math.floor((pointer.x - startOffsetx) / squareWidth);
+            const row = Math.floor((pointer.y - startOffsety) / squareHeight);
+            if (col >= 0 && col < numCols && row >= 0 && row < numRows) {
+            const x = startOffsetx + col * squareWidth + squareWidth / 2;
+            const y = startOffsety + row * squareHeight + squareHeight / 2;    
+            if (!this.gridCells[row][col].occupied && this.currency >= this.selectedTower.price) {
+                // Place the tower sprite at the calculated position
+                const towerSprite = this.add.sprite(x, y, this.selectedTower.name);
+                towerSprite.setDisplaySize(squareWidth * 0.8, squareHeight * 0.8); 
+                console.log(this.selectedTower.rotation_angle)
+                towerSprite.setAngle(this.selectedTower.rotation_angle);
+                // Mark the cell as occupied
+                this.gridCells[row][col] = { occupied: true };
+                // Deduct the tower price from player currency and update the UI
+                this.currency -= this.selectedTower.price;
+                // Reset selectedTower to prevent multiple placements
+                this.selectedTower = null;
+            }
+            } else {
+            console.log(`Outside of grid`);
+            }
+        });
     }
 
     update(time, delta) {
@@ -36,15 +86,6 @@ class MyGame extends Phaser.Scene {
         this.background.setOrigin(0, 0);
     }
     makeGrid() {
-        const numRows = 5;
-        const numCols = 9;
-        const startOffsetx = 150; 
-        const startOffsety = 100;
-        const bottomOffset = 50;
-        const rightOffset = 50;
-        const availableWidth = window.innerWidth - startOffsetx - rightOffset; 
-        const squareWidth = availableWidth / numCols; 
-        const squareHeight = (window.innerHeight - startOffsety - bottomOffset)/ numRows; 
         const graphics = this.add.graphics(); 
         
         graphics.lineStyle(2, 0x808080, 1);
@@ -55,7 +96,6 @@ class MyGame extends Phaser.Scene {
                 graphics.strokeRect(x, y, squareWidth, squareHeight);
             }
         }
-        this.gridLines.push(graphics);
     }
     createTowerSelectionUI() {
         const uiContainer = this.add.container(20, 10);
@@ -101,20 +141,20 @@ class MyGame extends Phaser.Scene {
                 color: '#FFFFFF',
             }).setOrigin(0.5, 0); 
             uiContainer.add(priceText);
-    
-            // Make box interactive
             towerBox.setInteractive();
             towerBox.on('pointerdown', () => {
-                console.log(`Selected ${tower.name} for ${tower.price}`);
+                console.log(`Selected ${tower.name}`);
+                this.selectedTower = tower;  
+                uiContainer.list.forEach(child => {
+                    if (child === towerBox) {
+                        child.setFillStyle(0x777777);  
+                    } else if (child.fillColor === 0x777777) {
+                        child.setFillStyle(0x555555); 
+                    }
+                });
             });
         });
     }
-    
-    
-    
-    
-    
-    
 }
 const config = {
     type: Phaser.AUTO,
@@ -127,6 +167,8 @@ const config = {
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
 };
+
+
 
 const game = new Phaser.Game(config);
 
