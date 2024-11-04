@@ -3,12 +3,12 @@ const minimumDelay = 1000;
 const delayReductionFactor = 0.95; 
 
 function triggerRandomSpawner() {
-    // Randomly choose a spawner and start spawning
-    const spawnerIndex = Phaser.Math.Between(0, this.enemySpawners.length - 1);
-    const chosenSpawner = this.enemySpawners[spawnerIndex];
+    const spawnerIndex = Phaser.Math.Between(0, this.enemyManager.spawners.length - 1);
+    const chosenSpawner = this.enemyManager.spawners[spawnerIndex];
+    console.log(chosenSpawner);
 
     if (chosenSpawner) {
-        chosenSpawner.startSpawning();
+        chosenSpawner.spawnEnemy();
     }
 }
 

@@ -12,18 +12,41 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.projectileSprite = enemyConfig.projectile_sprite;
         this.projectileSound = enemyConfig.projectile_sound;
         this.projectileSpeed = enemyConfig.projectile_speed;
-        this.setOrigin(0.5, 0.5);
-        this.setAngle(90);
-        this.setScale(0.5);
-        scene.add.existing(this);
-        scene.physics.add.existing(this);
-        this.setVelocityX(-this.speed * 40);
     }
     takeDamage(amount) {
         this.health -= amount;
+        this.updateTint();
+        this.playDamageAnimation();
         if (this.health <= 0) {
+            this.playDeathAnimation();
             this.die();
         }
+    }
+    updateTint() {
+        const healthPercentage = this.health / 100;
+        const tintAmount = Math.floor((1 - healthPercentage) * 255);
+        this.setTint(Phaser.Display.Color.GetColor(255, 255 - tintAmount, 255 - tintAmount));
+    }
+    playDamageAnimation() {
+        this.scene.tweens.add({
+            targets: this,
+            alpha: { from: 1, to: 0.5 },
+            ease: 'Cubic.easeOut',
+            duration: 100,
+            yoyo: true,
+            onComplete: () => {
+                this.setAlpha(1);
+            }
+        });
+    }
+    playDeathAnimation() {
+        this.scene.tweens.add({
+            targets: this,
+            alpha: { from: 1, to: 0 },
+            scale: { from: 1, to: 0 },
+            ease: 'Cubic.easeIn',
+            duration: 500,
+        });
     }
     die() {
         this.scene.playerCurrency += this.reward;

@@ -9,8 +9,9 @@ import { setupPlacedTowersDict } from './setupPlacedTowersDict.js';
 import { gridConfig } from './gridConfig.js';
 import { updateProjectiles } from './checkForProjectileUpdates.js';
 import { loadEnemies } from './enemyLoad.js';
-import { placeBaseSpawners } from './placeBaseSpawners.js';
 import { triggerRandomSpawner,startRandomWaveSpawner } from './waveControlFunctions.js';
+import { ProjectileManager } from './classes/ProjectileManager.js';
+import { EnemyManager } from './classes/EnemyManager.js';
 
 class MyGame extends Phaser.Scene {
     constructor() {
@@ -23,14 +24,14 @@ class MyGame extends Phaser.Scene {
         this.currency = 300;
         this.placedTowers = {};
         this.enemies = [];
-        this.activeEnemies = [];
         this.enemySpawners = [];
-        this.spawnedEnemies = 0;
         this.selectedTower = null;
         this.draggingTower = null;
         this.uiContainer = null;
         this.OreMines = [];
         this.currencyText = null;
+        this.enemyManager = null;
+        this.projectileManager = null;
     }
 
     preload() {
@@ -67,6 +68,8 @@ class MyGame extends Phaser.Scene {
     }
 
     create() {
+        this.projectileManager = new ProjectileManager(this,this.physics.add.group());
+        this.enemyManager = new EnemyManager(this);
         this.sound.pauseOnBlur = false;
         setBackground(this);
         makeGrid(this); 
@@ -96,8 +99,9 @@ class MyGame extends Phaser.Scene {
             console.log(this.music);
 
             createTowerSelectionUI(this);
-            placeBaseSpawners(this, this.enemies.slice(0, 1), 3000);
+            this.enemyManager.placeBaseSpawners();
             startRandomWaveSpawner.call(this);
+            this.physics.add.overlap(this.projectileManager.projectiles, this.enemyManager.activeEnemies, this.projectileManager.handleCollision, null, this.projectileManager);
         });
     }
 
@@ -116,7 +120,9 @@ class MyGame extends Phaser.Scene {
                 oremine.checkIfCanBuy();
             }
         }
-        updateProjectiles(this,delta);
+        if (this.projectileManager){
+            this.projectileManager.update(delta);
+        }
     }
 }
 const config = {

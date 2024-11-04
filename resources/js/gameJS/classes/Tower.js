@@ -8,17 +8,13 @@ class Tower extends Phaser.Physics.Arcade.Sprite  {
         this.range = range;
         this.rotation_angle = rotation_angle;
         this.target = null; 
-        this.lastAttackTime = 0;
-        this.projectiles = [];
         this.projectileSprite = projectileSprite;
-        this.projectileSpeed = projectileSpeed
-        this.timeSinceLastShot = 0;
+        this.projectileSpeed = projectileSpeed;
         scene.physics.add.existing(this);
         this.setImmovable(true);
         scene.add.existing(this);
         this.setAngle(this.rotation_angle); 
         this.startShooting();
-        this.scene.events.on('projectileOffScreen', this.handleProjectileOffScreen, this);
     }
 
     findTarget(enemies) {
@@ -42,15 +38,8 @@ class Tower extends Phaser.Physics.Arcade.Sprite  {
                 this.target,
                 { x: 1, y: 0 } 
             );
-            this.projectiles.push(projectile);
+            this.scene.projectileManager.addProjectile(projectile);
         }
-    }
-    update(delta, enemies) {
-        this.projectiles.forEach(projectile => projectile.update());
-    }
-    destroy() {
-        this.sprite.destroy();
-        this.projectiles.forEach(projectile => projectile.destroy());
     }
     startShooting() {
         this.scene.time.addEvent({
@@ -61,12 +50,6 @@ class Tower extends Phaser.Physics.Arcade.Sprite  {
             },
             loop: true
         });
-    }
-    handleProjectileOffScreen(projectile) {
-        const index = this.projectiles.indexOf(projectile);
-        if (index !== -1) {
-            this.projectiles.splice(index, 1);
-        }
     }
     animateShooting() {
         this.scene.tweens.add({

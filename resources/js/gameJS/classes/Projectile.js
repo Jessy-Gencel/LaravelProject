@@ -9,12 +9,7 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
         this.startX = x;
         this.startY = y;
         this.distanceTraveled = 0;
-        scene.physics.add.existing(this);
-        if (!this.target) {
-            this.setVelocity(this.speed * 200,0);
-        }
-        this.setAngle(90); // Set the initial rotation angle
-        scene.add.existing(this);
+        this.setAngle(90);
     }
 
     update() {
