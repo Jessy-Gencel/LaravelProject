@@ -18,7 +18,9 @@ class TowerSeeder extends Seeder
             'damage' => 10,
             'hitpoints' => 100,
             'fire_rate' => 1,
-            'rotation_angle' => -90
+            'rotation_angle' => -90,
+            'range' => null,
+            'projectile_speed' => 1
         ]);
         Tower::create([
             'name' => 'Combustion Tower',
@@ -28,7 +30,9 @@ class TowerSeeder extends Seeder
             'damage' => 15,
             'hitpoints' => 100,
             'fire_rate' => 1,
-            'rotation_angle' => 90
+            'rotation_angle' => 90,
+            'range' => null,
+            'projectile_speed' => 1
         ]);
         
     }

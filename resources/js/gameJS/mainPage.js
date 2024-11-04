@@ -3,36 +3,28 @@ import {loadTowers} from './towerLoad.js';
 import {setupUIHandlers,updateCurrencyText} from './setupUIHandlers.js';
 import {createTowerSelectionUI} from './createUI.js';
 import { setBackground,makeGrid } from './gameBoardSetup.js';
-import { OreMine } from './classLibrary.js';
-
-
-const gridConfig = {
-    numRows: 5,
-    numCols: 9,
-    startOffsetx: 150,
-    startOffsety: 150,
-    bottomOffset: 50,
-    rightOffset: 50,
-    get availableWidth() {
-        return window.innerWidth - this.startOffsetx - this.rightOffset;
-    },
-    get squareWidth() {
-        return this.availableWidth / this.numCols;
-    },
-    get squareHeight() {
-        return (window.innerHeight - this.startOffsety - this.bottomOffset) / this.numRows;
-    }
-};
+import { OreMine } from './classes/OreMine.js';
+import { setupOreMines } from './setupOreMines.js';
+import { setupPlacedTowersDict } from './setupPlacedTowersDict.js';
+import { gridConfig } from './gridConfig.js';
+import { updateProjectiles } from './checkForProjectileUpdates.js';
+import { loadEnemies } from './enemyLoad.js';
+import { placeBaseSpawners } from './placeBaseSpawners.js';
+import { triggerRandomSpawner,startRandomWaveSpawner } from './waveControlFunctions.js';
 
 class MyGame extends Phaser.Scene {
     constructor() {
         super({ key: 'MyGame' ,debug: true});
+        this.music = {};
         this.background = null; 
         this.gridCells = [];
         this.towers = [];
-        this.currency = 300;
-        this.placedTowers = [];
         this.enemies = [];
+        this.currency = 300;
+        this.placedTowers = {};
+        this.enemies = [];
+        this.activeEnemies = [];
+        this.enemySpawners = [];
         this.spawnedEnemies = 0;
         this.selectedTower = null;
         this.draggingTower = null;
@@ -46,38 +38,67 @@ class MyGame extends Phaser.Scene {
         this.load.image('currencyIconKey', 'storage/assets/misc/money.png');
         this.load.image('upgradeButton', 'storage/assets/misc/upgrade_button.png');
         this.load.image('buildButton', 'storage/assets/misc/build_button.png');
-        loadTowers.call(this).then((towers) => {
+        const towersPromise = loadTowers.call(this).then((towers) => {
             this.towers = towers;
             this.towers.forEach(tower => {
-            this.load.image(tower.name, tower.sprite_image);
-            console.log(tower.sprite_image);
-            this.load.image(`${tower.name}_projectile`, tower.projectile_image);
+                this.load.image(tower.name, tower.sprite_image);
+                console.log(tower.sprite_image);
+                this.load.image(`${tower.name}_projectile`, tower.projectile_image);
             });
-            this.load.start(); 
+        });
+        const enemiesPromise = loadEnemies().then((enemies) => {
+            this.enemies = enemies;
+            console.log(this.enemies);
+            this.enemies.forEach(enemy => {
+                this.load.image(enemy.name, enemy.sprite);
+                if (enemy.projectile_sprite && !enemy.projectile_sprite.split('/').pop().includes('null')) {
+                    this.load.image(`${enemy.name}_projectile`, enemy.projectile_sprite);
+                }
+            });
         });
         for (let i = 1; i <= 12; i++) {
             this.load.image(`oreminelvl${i}`, `storage/assets/oremines/ore_mine_lvl${i}.png`);
         }
+        Promise.all([towersPromise, enemiesPromise]).then(() => {
+            this.load.audio('backgroundMusic1', 'storage/audio/background_music.mp3');
+            this.load.audio('bossMusic1', 'storage/audio/boss_music.mp3');
+            this.load.start();
+        });
     }
 
     create() {
-        this.load.on('complete', () => {
-            createTowerSelectionUI(this);
-        });
+        this.sound.pauseOnBlur = false;
         setBackground(this);
-        makeGrid(this, gridConfig); 
+        makeGrid(this); 
         this.gridCells = Array.from({ length: gridConfig.numRows }, () => Array(gridConfig.numCols).fill({ occupied: false }));
-        setupUIHandlers(this, gridConfig);
-        for (let row = 0; row < gridConfig.numRows; row++) {
-            const x = 70; // Set X-position for factory icons on the left
-            const y = gridConfig.startOffsety + gridConfig.squareHeight/2 + row * gridConfig.squareHeight;
-            const OreMine1 = new OreMine(this, x, y, 50, 10); 
-            this.OreMines.push(OreMine1);
-        }
-        
-        // Initial free factory in the middle row
+        setupUIHandlers(this);
+        setupOreMines(this);
+        setupPlacedTowersDict(this);
         this.OreMines[2].purchase();
-    
+        this.load.on('complete', () => {
+            this.music['background1'] = this.sound.add('backgroundMusic1', {
+                volume: 0.3, 
+                loop: false  
+            });
+            this.music['background1'].play();
+            this.time.addEvent({
+                delay: this.music['background1'].duration * 1000 - 1000,
+                callback: () => {
+                    this.music['background1'].setSeek(1);
+                },
+                callbackScope: this,
+                loop: true
+            });
+            this.music['boss1'] = this.sound.add('bossMusic1', {
+                volume: 0.3, 
+                loop: false  
+            });
+            console.log(this.music);
+
+            createTowerSelectionUI(this);
+            placeBaseSpawners(this, this.enemies.slice(0, 1), 3000);
+            startRandomWaveSpawner.call(this);
+        });
     }
 
     update(time, delta) {
@@ -95,6 +116,7 @@ class MyGame extends Phaser.Scene {
                 oremine.checkIfCanBuy();
             }
         }
+        updateProjectiles(this,delta);
     }
 }
 const config = {
@@ -107,6 +129,12 @@ const config = {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
+    physics:{
+        default: 'arcade',
+        arcade: {
+            debug: true,
+        }
+    }
 };
 
 

@@ -20,8 +20,10 @@ async function loadTowers() {
             projectile_image: `storage/assets/projectiles/${tower.projectile_image}`,
             damage: tower.damage,
             hitpoints: tower.hitpoints,
-            fire_rate: tower.fire_rate,
+            attackSpeed: tower.fire_rate,
             rotation_angle: tower.rotation_angle,
+            projectileSpeed: tower.projectile_speed,
+            range: tower.range,
         }));
         return formattedtowers;
     } catch (error) {

@@ -17,6 +17,9 @@ class Tower extends Model
         'damage',
         'hitpoints',
         'fire_rate',
+        'rotation_angle',
+        'range',
+        'projectile_speed'
     ];
 }
 

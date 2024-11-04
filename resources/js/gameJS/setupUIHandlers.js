@@ -1,4 +1,6 @@
-function setupUIHandlers(game, gridConfig) {
+import { Tower } from "./classes/Tower";
+import { gridConfig } from "./gridConfig";
+function setupUIHandlers(game) {
     game.input.on('pointerdown', (pointer) => {
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
@@ -24,14 +26,26 @@ function setupUIHandlers(game, gridConfig) {
             if (col >= 0 && col < gridConfig.numCols && row >= 0 && row < gridConfig.numRows) {
                 const x = gridConfig.startOffsetx + col * gridConfig.squareWidth + gridConfig.squareWidth / 2;
                 const y = gridConfig.startOffsety + row * gridConfig.squareHeight + gridConfig.squareHeight / 2;
+                console.log(game.selectedTower)
                 if (!game.gridCells[row][col].occupied && game.currency >= game.selectedTower.price) {
-                    // Place the tower sprite at the calculated position
-                    game.draggingTower.x = x;
-                    game.draggingTower.y = y;
+                    const newTower = new Tower(
+                        game,
+                        x,
+                        y,
+                        game.selectedTower.name,
+                        game.selectedTower.attackSpeed,
+                        game.selectedTower.damage,
+                        game.selectedTower.range,
+                        game.selectedTower.rotation_angle,
+                        game.selectedTower.name + '_projectile',
+                        game.selectedTower.projectileSpeed
+                    );
+                    console.log(newTower)
+                    game.placedTowers[row][col] = newTower;
                     game.gridCells[row][col] = { occupied: true };
                     game.currency -= game.selectedTower.price;
                     game.selectedTower = null;
-                    game.draggingTower = null;
+                    game.draggingTower.destroy();
                 } else {
                     game.draggingTower.destroy();
                     game.draggingTower = null;

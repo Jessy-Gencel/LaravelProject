@@ -8,3 +8,4 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 Route::get('/towers', GameController::class . '@getTowers');
+Route::get('/enemies', GameController::class . '@getEnemies');

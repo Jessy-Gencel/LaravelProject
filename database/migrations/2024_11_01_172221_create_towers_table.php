@@ -18,6 +18,8 @@ class CreateTowersTable extends Migration
             $table->float('rotation_angle')->default(0);
             $table->string('sprite_image');
             $table->string('projectile_image');
+            $table->float('range')->nullable();
+            $table->float('projectile_speed')->default(1);
             $table->timestamps();
         });
     }
