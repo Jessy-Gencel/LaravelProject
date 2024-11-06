@@ -1,8 +1,10 @@
 import Phaser from 'phaser';
 import { Projectile } from './Projectile';
 class Tower extends Phaser.Physics.Arcade.Sprite  {
-    constructor(scene, x, y, sprite, attackSpeed, damage, range, rotation_angle,projectileSprite,projectileSpeed) {
+    constructor(scene, x, y, sprite, hitpoints,attackSpeed, damage, range, rotation_angle,projectileSprite,projectileSpeed) {
         super(scene, x, y, sprite);
+        this.remainingHitpoints = hitpoints;
+        this.hitpoints = hitpoints;
         this.attackSpeed = attackSpeed;
         this.damage = damage;
         this.range = range;
@@ -14,15 +16,21 @@ class Tower extends Phaser.Physics.Arcade.Sprite  {
         this.setImmovable(true);
         scene.add.existing(this);
         this.setAngle(this.rotation_angle); 
+        this.actions = [];
         this.startShooting();
     }
 
     findTarget(enemies) {
         this.target = enemies.find(enemy => Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, enemy.x, enemy.y) <= this.range);
     }
-
-    destroy() {
-        this.sprite.destroy();
+    updateTint() {
+        const healthPercentage = this.remainingHitpoints / this.hitpoints;
+        const tintAmount = Math.floor((1 - healthPercentage) * 255);
+        this.setTint(Phaser.Display.Color.GetColor(255, 255 - tintAmount, 255 - tintAmount));
+    }
+    takeDamage(damage) {
+        this.remainingHitpoints -= damage;
+        this.updateTint();
     }
     shoot() {
         console.log('were here')
@@ -42,16 +50,26 @@ class Tower extends Phaser.Physics.Arcade.Sprite  {
         }
     }
     startShooting() {
-        this.scene.time.addEvent({
+        this.actions.push(this.scene.time.addEvent({
             delay: 3000, 
             callback: () => {
                 this.shoot();
                 this.animateShooting();
             },
             loop: true
-        });
+        }));
+    }
+    destroy() {
+        this.stopShooting();
+        super.destroy();
+    }
+    stopShooting() {
+        for (let action of this.actions) {
+            action.remove();
+        }
     }
     animateShooting() {
+        this.actions.push(
         this.scene.tweens.add({
             targets: this,
             scaleX: 1.2,
@@ -61,13 +79,14 @@ class Tower extends Phaser.Physics.Arcade.Sprite  {
             onComplete: () => {
                 this.setScale(1);
             }
-        });
+        }));
+        this.actions.push(
         this.scene.tweens.add({
             targets: this,
             x: this.x - 30,
             duration: 50,
             yoyo: true
-        });
+        }));
     }
 
 }

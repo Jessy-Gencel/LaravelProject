@@ -3,6 +3,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         console.log(enemyConfig);
         super(scene, x, y, enemyConfig.name);
         this.scene = scene;
+        this.remainingHealth = enemyConfig.health;
         this.health = enemyConfig.health;
         this.speed = enemyConfig.speed;
         this.damage = enemyConfig.damage;
@@ -12,18 +13,16 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.projectileSprite = enemyConfig.projectile_sprite;
         this.projectileSound = enemyConfig.projectile_sound;
         this.projectileSpeed = enemyConfig.projectile_speed;
+        this.damageTimer = null;
+        this.isEngaged = false;
     }
     takeDamage(amount) {
-        this.health -= amount;
+        this.remainingHealth -= amount;
         this.updateTint();
         this.playDamageAnimation();
-        if (this.health <= 0) {
-            this.playDeathAnimation();
-            this.die();
-        }
     }
     updateTint() {
-        const healthPercentage = this.health / 100;
+        const healthPercentage = this.remainingHealth / this.health;
         const tintAmount = Math.floor((1 - healthPercentage) * 255);
         this.setTint(Phaser.Display.Color.GetColor(255, 255 - tintAmount, 255 - tintAmount));
     }

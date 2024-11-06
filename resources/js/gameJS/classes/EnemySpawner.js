@@ -22,8 +22,17 @@ class Spawner {
             this.spawnEvent = null;
         }
     }
-    spawnEnemy() {
-        const enemyConfig = Phaser.Utils.Array.GetRandom(this.enemyConfigList);
+    spawnEnemyRandom() {
+        const enemyConfigKeys = Object.keys(this.enemyConfigList);
+        const randomKey = Phaser.Utils.Array.GetRandom(enemyConfigKeys);
+        const enemyConfig = this.enemyConfigList[randomKey];
+        const enemy = new Enemy(this.scene, this.spawnX, this.spawnY, enemyConfig);
+        this.scene.enemyManager.addEnemy(enemy);
+    }
+    spawnEnemy(enemyType){
+        console.log(enemyType);
+        const enemyConfig = this.enemyConfigList[enemyType];
+        console.log(this.enemyConfigList);
         const enemy = new Enemy(this.scene, this.spawnX, this.spawnY, enemyConfig);
         this.scene.enemyManager.addEnemy(enemy);
     }

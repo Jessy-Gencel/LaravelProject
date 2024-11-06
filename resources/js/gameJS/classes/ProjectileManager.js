@@ -1,7 +1,7 @@
 class ProjectileManager {
-    constructor(scene,projectiles) {
+    constructor(scene) {
         this.scene = scene;
-        this.projectiles = projectiles;
+        this.projectiles =  this.scene.physics.add.group();;
         this.scene.events.on('projectileOffScreen', this.handleProjectileOffScreen, this);
     }
 
@@ -22,7 +22,14 @@ class ProjectileManager {
 
     handleCollision(projectile, enemy) {
         enemy.takeDamage(projectile.damage); 
-        console.log(`Hit! Enemy health: ${enemy.health}`);
+        if (enemy.remainingHealth <= 0) {
+            if (enemy.damageTimer) {
+                enemy.damageTimer.remove();
+                enemy.damageTimer = null;
+            }
+            enemy.playDeathAnimation();
+            enemy.die();
+        }
         projectile.destroy(); 
     }
     update(delta) {

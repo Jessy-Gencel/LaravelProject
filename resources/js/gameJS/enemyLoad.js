@@ -13,19 +13,22 @@ async function loadEnemies() {
         }
 
         const enemies = await response.json();
-        const formattedenemies = enemies.map(enemy => ({
-            name: enemy.name,
-            health: enemy.health,
-            speed: enemy.speed,
-            damage: enemy.damage,
-            score: enemy.score,
-            sprite: `storage/assets/enemies/${enemy.sprite}`,
-            sound: `storage/assets/sounds/${enemy.sound}`,
-            projectile_sprite: `storage/assets/projectiles/${enemy.projectile_sprite}`,
-            projectile_sound: `storage/assets/sounds/${enemy.projectile_sound}`,
-            projectile_speed: enemy.projectile_speed,
-        }));
-        return formattedenemies;
+        const formattedEnemies = enemies.reduce((acc, enemy) => {
+            acc[enemy.name] = {
+                name: enemy.name,
+                health: enemy.health,
+                speed: enemy.speed,
+                damage: enemy.damage,
+                score: enemy.score,
+                sprite: `storage/assets/enemies/${enemy.sprite}`,
+                sound: `storage/assets/sounds/${enemy.sound}`,
+                projectile_sprite: `storage/assets/projectiles/${enemy.projectile_sprite}`,
+                projectile_sound: `storage/assets/sounds/${enemy.projectile_sound}`,
+                projectile_speed: enemy.projectile_speed,
+            };
+            return acc;
+        }, {});
+        return formattedEnemies;
     } catch (error) {
         console.error('Error fetching towers:', error);
         return [];

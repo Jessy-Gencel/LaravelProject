@@ -12,7 +12,7 @@ class EnemySeeder extends Seeder
     public function run(): void
     {
         Enemy::create([
-            'name' => 'fledgling',
+            'name' => 'fledgeling',
             'health' => 100,
             'speed' => 1.0,
             'score' => 100,
@@ -21,7 +21,7 @@ class EnemySeeder extends Seeder
         ]);
 
         Enemy::create([
-            'name' => 'fledgling_runner',
+            'name' => 'fledgeling_runner',
             'health' => 70,
             'speed' => 1.5,
             'score' => 100,
@@ -30,7 +30,7 @@ class EnemySeeder extends Seeder
         ]);
 
         Enemy::create([
-            'name' => 'Tank',
+            'name' => 'tank',
             'health' => 300,
             'speed' => 0.5,
             'score' => 200,

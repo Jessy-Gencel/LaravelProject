@@ -2,16 +2,12 @@ import Phaser from 'phaser';
 import {loadTowers} from './towerLoad.js';
 import {setupUIHandlers,updateCurrencyText} from './setupUIHandlers.js';
 import {createTowerSelectionUI} from './createUI.js';
-import { setBackground,makeGrid } from './gameBoardSetup.js';
 import { OreMine } from './classes/OreMine.js';
-import { setupOreMines } from './setupOreMines.js';
-import { setupPlacedTowersDict } from './setupPlacedTowersDict.js';
 import { gridConfig } from './gridConfig.js';
 import { updateProjectiles } from './checkForProjectileUpdates.js';
 import { loadEnemies } from './enemyLoad.js';
-import { triggerRandomSpawner,startRandomWaveSpawner } from './waveControlFunctions.js';
-import { ProjectileManager } from './classes/ProjectileManager.js';
-import { EnemyManager } from './classes/EnemyManager.js';
+import { initialize } from './init.js';
+import { WaveController } from './classes/WaveController.js';
 
 class MyGame extends Phaser.Scene {
     constructor() {
@@ -23,7 +19,7 @@ class MyGame extends Phaser.Scene {
         this.enemies = [];
         this.currency = 300;
         this.placedTowers = {};
-        this.enemies = [];
+        this.enemies = {};
         this.enemySpawners = [];
         this.selectedTower = null;
         this.draggingTower = null;
@@ -32,6 +28,8 @@ class MyGame extends Phaser.Scene {
         this.currencyText = null;
         this.enemyManager = null;
         this.projectileManager = null;
+        this.towerManager = null;
+        this.waveController = null;
     }
 
     preload() {
@@ -39,6 +37,7 @@ class MyGame extends Phaser.Scene {
         this.load.image('currencyIconKey', 'storage/assets/misc/money.png');
         this.load.image('upgradeButton', 'storage/assets/misc/upgrade_button.png');
         this.load.image('buildButton', 'storage/assets/misc/build_button.png');
+        this.load.json('waveData', 'storage/json/waveConfig.json');
         const towersPromise = loadTowers.call(this).then((towers) => {
             this.towers = towers;
             this.towers.forEach(tower => {
@@ -49,8 +48,9 @@ class MyGame extends Phaser.Scene {
         });
         const enemiesPromise = loadEnemies().then((enemies) => {
             this.enemies = enemies;
-            console.log(this.enemies);
-            this.enemies.forEach(enemy => {
+            Object.keys(this.enemies).forEach(enemyKey => {
+                const enemy = this.enemies[enemyKey];
+                console.log(enemy.name,enemy.sprite)
                 this.load.image(enemy.name, enemy.sprite);
                 if (enemy.projectile_sprite && !enemy.projectile_sprite.split('/').pop().includes('null')) {
                     this.load.image(`${enemy.name}_projectile`, enemy.projectile_sprite);
@@ -68,15 +68,8 @@ class MyGame extends Phaser.Scene {
     }
 
     create() {
-        this.projectileManager = new ProjectileManager(this,this.physics.add.group());
-        this.enemyManager = new EnemyManager(this);
-        this.sound.pauseOnBlur = false;
-        setBackground(this);
-        makeGrid(this); 
-        this.gridCells = Array.from({ length: gridConfig.numRows }, () => Array(gridConfig.numCols).fill({ occupied: false }));
-        setupUIHandlers(this);
-        setupOreMines(this);
-        setupPlacedTowersDict(this);
+        this.time.delayedCall
+        initialize(this);
         this.OreMines[2].purchase();
         this.load.on('complete', () => {
             this.music['background1'] = this.sound.add('backgroundMusic1', {
@@ -97,11 +90,13 @@ class MyGame extends Phaser.Scene {
                 loop: false  
             });
             console.log(this.music);
-
             createTowerSelectionUI(this);
+            const waveData = this.cache.json.get('waveData');
+            this.waveController = new WaveController(this, waveData);
             this.enemyManager.placeBaseSpawners();
-            startRandomWaveSpawner.call(this);
-            this.physics.add.overlap(this.projectileManager.projectiles, this.enemyManager.activeEnemies, this.projectileManager.handleCollision, null, this.projectileManager);
+            this.physics.add.overlap(this.projectileManager.projectiles, this.enemyManager.enemies, this.projectileManager.handleCollision, null, this.projectileManager);
+            this.physics.add.overlap(this.enemyManager.enemies, this.towerManager.towers, this.enemyManager.startDamageOverTime, null, this.enemyManager);
+            this.waveController.startWave(0);
         });
     }
 
@@ -146,4 +141,3 @@ const config = {
 
 
 const game = new Phaser.Game(config);
-

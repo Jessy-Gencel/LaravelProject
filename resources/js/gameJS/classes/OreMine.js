@@ -172,8 +172,8 @@ class OreMine {
 
         this.scene.tweens.add({
             targets: this.mineralSprite,
-            scaleX: 0.6,
-            scaleY: 0.6,
+            scaleX: this.level > 8 ? 0.10 : this.level > 4 ? 0.5 : 0.6,
+            scaleY: this.level > 8 ? 0.10 : this.level > 4 ? 0.5 : 0.6,
             yoyo: true,
             duration: 200,
             ease: 'Power1'

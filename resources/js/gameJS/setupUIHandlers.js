@@ -33,6 +33,7 @@ function setupUIHandlers(game) {
                         x,
                         y,
                         game.selectedTower.name,
+                        game.selectedTower.hitpoints,
                         game.selectedTower.attackSpeed,
                         game.selectedTower.damage,
                         game.selectedTower.range,
@@ -41,18 +42,19 @@ function setupUIHandlers(game) {
                         game.selectedTower.projectileSpeed
                     );
                     console.log(newTower)
+                    game.towerManager.addTower(newTower);
                     game.placedTowers[row][col] = newTower;
                     game.gridCells[row][col] = { occupied: true };
                     game.currency -= game.selectedTower.price;
                     game.selectedTower = null;
                     game.draggingTower.destroy();
+                    game.draggingTower = null;
                 } else {
                     game.draggingTower.destroy();
                     game.draggingTower = null;
                 }
             } else {
                 game.draggingTower.destroy();
-                console.log(game.selectedTower)
                 game.selectedTower = null;
                 game.draggingTower = null;
             }
