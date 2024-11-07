@@ -1,8 +1,10 @@
+import { Projectile } from '../Projectile.js';
 class Enemy extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, enemyConfig) {
+    constructor(scene, x, y, row, enemyConfig) {
         console.log(enemyConfig);
-        super(scene, x, y, enemyConfig.name);
-        this.scene = scene;
+        super(scene, x, y,enemyConfig.name);
+        this.name = enemyConfig.name;
+        this.row = row;
         this.remainingHealth = enemyConfig.health;
         this.health = enemyConfig.health;
         this.speed = enemyConfig.speed;
@@ -10,10 +12,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.score = enemyConfig.score;
         this.sprite = enemyConfig.sprite;
         this.sound = enemyConfig.sound;
-        this.projectileSprite = enemyConfig.projectile_sprite;
-        this.projectileSound = enemyConfig.projectile_sound;
-        this.projectileSpeed = enemyConfig.projectile_speed;
-        this.damageTimer = null;
+        this.actions = [];
         this.isEngaged = false;
     }
     takeDamage(amount) {

@@ -9,7 +9,6 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
         this.startX = x;
         this.startY = y;
         this.distanceTraveled = 0;
-        this.setAngle(90);
     }
 
     update() {

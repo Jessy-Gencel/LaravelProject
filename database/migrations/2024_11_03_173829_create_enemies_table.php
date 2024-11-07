@@ -10,6 +10,7 @@ class CreateEnemiesTable extends Migration
     {
         Schema::create('enemies', function (Blueprint $table) {
             $table->id();
+            $table->string('type');
             $table->string('name');
             $table->integer('health');
             $table->float('speed');
@@ -20,6 +21,9 @@ class CreateEnemiesTable extends Migration
             $table->string('projectile_sprite')->nullable();
             $table->string('projectile_sound')->nullable();
             $table->float('projectile_speed')->nullable();
+            $table->float('range')->nullable();
+            $table->integer('heal_amount')->nullable();
+            $table->integer('fire_rate')->nullable();
             $table->timestamps();
         });
     }

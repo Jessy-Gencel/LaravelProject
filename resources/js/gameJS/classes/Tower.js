@@ -31,6 +31,7 @@ class Tower extends Phaser.Physics.Arcade.Sprite  {
     takeDamage(damage) {
         this.remainingHitpoints -= damage;
         this.updateTint();
+        this.playDamageAnimation();
     }
     shoot() {
         console.log('were here')
@@ -87,6 +88,18 @@ class Tower extends Phaser.Physics.Arcade.Sprite  {
             duration: 50,
             yoyo: true
         }));
+    }
+    playDamageAnimation() {
+        this.scene.tweens.add({
+            targets: this,
+            alpha: { from: 1, to: 0.5 },
+            ease: 'Cubic.easeOut',
+            duration: 100,
+            yoyo: true,
+            onComplete: () => {
+                this.setAlpha(1);
+            }
+        });
     }
 
 }

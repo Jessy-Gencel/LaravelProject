@@ -49,6 +49,7 @@ function setupUIHandlers(game) {
                     game.selectedTower = null;
                     game.draggingTower.destroy();
                     game.draggingTower = null;
+                    game.enemyManager.interuptRangedEnemies()
                 } else {
                     game.draggingTower.destroy();
                     game.draggingTower = null;

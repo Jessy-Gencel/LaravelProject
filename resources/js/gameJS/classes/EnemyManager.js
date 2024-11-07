@@ -1,14 +1,24 @@
 import { gridConfig } from '../gridConfig.js';
 import { Spawner } from './EnemySpawner.js';
+import { RangedEnemy } from './enemies/RangedEnemy.js';
 class EnemyManager {
     constructor(scene) {
         this.scene = scene; 
         this.spawners = [];
         this.enemies = this.scene.physics.add.group();
+        this.rangedEnemies = this.scene.physics.add.group();
     }
 
     addEnemy(enemy) {
-        this.enemies.add(enemy);
+        console.log(enemy);
+        if (enemy instanceof RangedEnemy) {
+            this.rangedEnemies.add(enemy);
+        } else {
+            console.log("test");
+            this.enemies.add(enemy);
+            console.log(this.enemies);
+        }
+        console.log("test");
         enemy.setOrigin(0.5, 0.5);
         enemy.setAngle(90);
         enemy.setScale(0.5);
@@ -17,10 +27,25 @@ class EnemyManager {
         this.scene.physics.add.existing(enemy);
         console.log(this.enemies);
     }
+    interuptRangedEnemies(){
+        this.rangedEnemies.children.each(enemy => {
+            if (enemy.isFiring){
+                enemy.interruptShooting();
+            }
+        });
+    }
+
     updateEnemies(time, delta) {
         this.enemyGroup.children.each(enemy => {
             if (enemy.active) {
                 enemy.update(time, delta); 
+            }
+        });
+    }
+    updateRangedEnemies(time, delta) {
+        this.rangedEnemies.children.each(enemy => {
+            if (enemy.active) {
+                enemy.checkEnemyRange(); 
             }
         });
     }
@@ -29,7 +54,7 @@ class EnemyManager {
             enemy.isEngaged = true;
             enemy.setVelocityX(0);
             const damageInterval = 1000;
-            enemy.damageTimer = this.scene.time.addEvent({
+            enemy.actions.push(this.scene.time.addEvent({
                 delay: damageInterval,       
                 callback: () => {
                     console.log(tower.active, enemy.active);
@@ -44,7 +69,7 @@ class EnemyManager {
                     }
                 },
                 loop: true                    
-            });
+            }));
         }
     }
     stopDamageOverTime(enemy) {
@@ -52,9 +77,11 @@ class EnemyManager {
             console.log(enemy);
             enemy.setVelocityX(-enemy.speed * 50);
             enemy.isEngaged = false;
-            if (enemy.damageTimer) {
-                enemy.damageTimer.remove();
-                enemy.damageTimer = null;
+            if (enemy.actions.length > 0){ 
+                enemy.actions.forEach(action => {
+                    action.remove();
+                });
+                console.log(enemy.actions);
                 enemy.isDamaging = false;   
             }
         }
@@ -66,7 +93,7 @@ class EnemyManager {
         for (let row = 0; row < gridConfig.numRows; row++) {
             const x = this.scene.scale.width - 50;
             const y = gridConfig.startOffsety + gridConfig.squareHeight/2 + row * gridConfig.squareHeight;
-            const enemySpawner1 = new Spawner(this.scene, x, y, this.scene.enemies); 
+            const enemySpawner1 = new Spawner(this.scene, x, y,row,this.scene.enemies); 
             this.spawners.push(enemySpawner1);
         }
     }

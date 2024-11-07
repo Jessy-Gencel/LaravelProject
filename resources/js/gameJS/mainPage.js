@@ -89,13 +89,15 @@ class MyGame extends Phaser.Scene {
                 volume: 0.3, 
                 loop: false  
             });
-            console.log(this.music);
+            console.log(this.placedTowers);
             createTowerSelectionUI(this);
             const waveData = this.cache.json.get('waveData');
             this.waveController = new WaveController(this, waveData);
             this.enemyManager.placeBaseSpawners();
             this.physics.add.overlap(this.projectileManager.projectiles, this.enemyManager.enemies, this.projectileManager.handleCollision, null, this.projectileManager);
             this.physics.add.overlap(this.enemyManager.enemies, this.towerManager.towers, this.enemyManager.startDamageOverTime, null, this.enemyManager);
+            this.physics.add.overlap(this.projectileManager.projectiles, this.enemyManager.rangedEnemies, this.projectileManager.handleCollision, null, this.projectileManager);
+            this.physics.add.overlap(this.projectileManager.enemyProjectiles, this.towerManager.towers, this.projectileManager.handleEnemyProjectileCollision, null, this.projectileManager);
             this.waveController.startWave(0);
         });
     }
@@ -117,6 +119,9 @@ class MyGame extends Phaser.Scene {
         }
         if (this.projectileManager){
             this.projectileManager.update(delta);
+        }
+        if (this.enemyManager){
+            this.enemyManager.updateRangedEnemies(time, delta);
         }
     }
 }
