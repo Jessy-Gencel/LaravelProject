@@ -26,7 +26,6 @@ function setupUIHandlers(game) {
             if (col >= 0 && col < gridConfig.numCols && row >= 0 && row < gridConfig.numRows) {
                 const x = gridConfig.startOffsetx + col * gridConfig.squareWidth + gridConfig.squareWidth / 2;
                 const y = gridConfig.startOffsety + row * gridConfig.squareHeight + gridConfig.squareHeight / 2;
-                console.log(game.selectedTower)
                 if (!game.gridCells[row][col].occupied && game.currency >= game.selectedTower.price) {
                     const newTower = new Tower(
                         game,
@@ -39,9 +38,10 @@ function setupUIHandlers(game) {
                         game.selectedTower.range,
                         game.selectedTower.rotation_angle,
                         game.selectedTower.name + '_projectile',
-                        game.selectedTower.projectileSpeed
+                        game.selectedTower.projectileSpeed,
+                        row,
+                        col,
                     );
-                    console.log(newTower)
                     game.towerManager.addTower(newTower);
                     game.placedTowers[row][col] = newTower;
                     game.gridCells[row][col] = { occupied: true };

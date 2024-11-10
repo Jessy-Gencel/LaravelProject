@@ -10,9 +10,7 @@ class WaveController {
     }
 
     startWave(waveIndex) {
-        console.log(this.waves);
         const wave = this.waves[waveIndex];
-        console.log(wave);
         if (!wave) return;
 
         wave.enemies.forEach((enemyConfig) => {

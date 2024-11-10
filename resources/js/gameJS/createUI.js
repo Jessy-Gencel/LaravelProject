@@ -43,11 +43,9 @@ function createTowerSelectionUI(game) {
         uiContainer.add(priceText);
         towerBox.setInteractive();
         towerBox.on('pointerdown', () => {
-            console.log(`Selected ${tower.name}`);
             game.selectedTower = tower;  
             uiContainer.list.forEach(child => {
                 if (child === towerBox) {
-                    console.log(towerBox);
                     child.setFillStyle(0x777777);  
                 } else if (child.fillColor === 0x777777) {
                     child.setFillStyle(0x555555); 

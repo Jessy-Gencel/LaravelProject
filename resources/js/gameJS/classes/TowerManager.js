@@ -5,6 +5,11 @@ class TowerManager {
     }
 
     addTower(tower) {
+        this.scene.add.existing(tower);
+        this.scene.physics.add.existing(tower);
+        tower.setImmovable(true);
+        tower.setAngle(tower.rotation_angle); 
+        tower.startShooting();
         this.towers.add(tower);
     }
 

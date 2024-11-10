@@ -32,9 +32,7 @@ class Spawner {
         this.scene.enemyManager.addEnemy(enemy);
     }
     spawnEnemy(enemyType){
-        console.log(enemyType);
         const enemyConfig = this.enemyConfigList[enemyType];
-        console.log(this.enemyConfigList);
         const enemy = checkEnemyType(this.scene, this.spawnX, this.spawnY, this.row, enemyConfig);
         this.scene.enemyManager.addEnemy(enemy);
     }

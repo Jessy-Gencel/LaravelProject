@@ -35,6 +35,7 @@ class MyGame extends Phaser.Scene {
     preload() {
         this.load.image('background', 'storage/assets/env/background.png');
         this.load.image('currencyIconKey', 'storage/assets/misc/money.png');
+        this.load.image('healEffect', 'storage/assets/misc/heal_effect.webp');
         this.load.image('upgradeButton', 'storage/assets/misc/upgrade_button.png');
         this.load.image('buildButton', 'storage/assets/misc/build_button.png');
         this.load.json('waveData', 'storage/json/waveConfig.json');
@@ -42,7 +43,6 @@ class MyGame extends Phaser.Scene {
             this.towers = towers;
             this.towers.forEach(tower => {
                 this.load.image(tower.name, tower.sprite_image);
-                console.log(tower.sprite_image);
                 this.load.image(`${tower.name}_projectile`, tower.projectile_image);
             });
         });
@@ -50,7 +50,6 @@ class MyGame extends Phaser.Scene {
             this.enemies = enemies;
             Object.keys(this.enemies).forEach(enemyKey => {
                 const enemy = this.enemies[enemyKey];
-                console.log(enemy.name,enemy.sprite)
                 this.load.image(enemy.name, enemy.sprite);
                 if (enemy.projectile_sprite && !enemy.projectile_sprite.split('/').pop().includes('null')) {
                     this.load.image(`${enemy.name}_projectile`, enemy.projectile_sprite);
@@ -89,7 +88,6 @@ class MyGame extends Phaser.Scene {
                 volume: 0.3, 
                 loop: false  
             });
-            console.log(this.placedTowers);
             createTowerSelectionUI(this);
             const waveData = this.cache.json.get('waveData');
             this.waveController = new WaveController(this, waveData);
@@ -121,6 +119,7 @@ class MyGame extends Phaser.Scene {
             this.projectileManager.update(delta);
         }
         if (this.enemyManager){
+            this.enemyManager.updateEnemies(time, delta);
             this.enemyManager.updateRangedEnemies(time, delta);
         }
     }

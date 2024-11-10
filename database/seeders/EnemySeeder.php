@@ -19,6 +19,7 @@ class EnemySeeder extends Seeder
             'score' => 100,
             'sprite' => 'fledgeling.png',
             'damage' => 10,
+            'fire_rate' => 1.0,
         ]);
 
         Enemy::create([
@@ -29,6 +30,7 @@ class EnemySeeder extends Seeder
             'score' => 100,
             'sprite' => 'fledgeling_runner.png',
             'damage' => 10,
+            'fire_rate' => 1.0,
         ]);
 
         Enemy::create([
@@ -51,6 +53,7 @@ class EnemySeeder extends Seeder
             'projectile_sprite' => 'spit.png',
             'projectile_speed' => 1.0,
             'range' => 400,
+            'fire_rate' => 1.0,
         ]);
         Enemy::create([
             'name' => 'priest',
@@ -63,6 +66,7 @@ class EnemySeeder extends Seeder
             'projectile_speed' => 4.0,
             'range' => 200,
             'heal_amount' => 10,
+            'fire_rate' => 4.0,
         ]);
     }
 }

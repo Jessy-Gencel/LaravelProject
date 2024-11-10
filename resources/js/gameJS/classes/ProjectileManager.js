@@ -34,12 +34,6 @@ class ProjectileManager {
     handleCollision(projectile, enemy) {
         enemy.takeDamage(projectile.damage); 
         if (enemy.remainingHealth <= 0) {
-            if (enemy.actions.length > 0) {
-                for (let i = 0; i < enemy.actions.length; i++) {
-                    enemy.actions[i].remove();
-                }
-            }
-            enemy.playDeathAnimation();
             enemy.die();
         }
         projectile.destroy(); 

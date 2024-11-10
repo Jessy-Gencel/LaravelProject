@@ -57,7 +57,6 @@ class RangedEnemy extends Enemy{
                     continue;
                 }
                 const distance = Math.abs(this.x - tower.x);
-                console.log(this.range)
                 if (distance <= this.range) {
                     this.target = tower;
                     this.startShooting();

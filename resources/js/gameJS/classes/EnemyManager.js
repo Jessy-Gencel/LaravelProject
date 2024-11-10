@@ -1,6 +1,7 @@
 import { gridConfig } from '../gridConfig.js';
 import { Spawner } from './EnemySpawner.js';
 import { RangedEnemy } from './enemies/RangedEnemy.js';
+import { HealerEnemy } from './enemies/EnemyHealer.js';
 class EnemyManager {
     constructor(scene) {
         this.scene = scene; 
@@ -10,22 +11,17 @@ class EnemyManager {
     }
 
     addEnemy(enemy) {
-        console.log(enemy);
         if (enemy instanceof RangedEnemy) {
             this.rangedEnemies.add(enemy);
         } else {
-            console.log("test");
             this.enemies.add(enemy);
-            console.log(this.enemies);
         }
-        console.log("test");
         enemy.setOrigin(0.5, 0.5);
         enemy.setAngle(90);
         enemy.setScale(0.5);
         enemy.setVelocityX(-enemy.speed * 50);
         this.scene.add.existing(enemy);
         this.scene.physics.add.existing(enemy);
-        console.log(this.enemies);
     }
     interuptRangedEnemies(){
         this.rangedEnemies.children.each(enemy => {
@@ -34,9 +30,16 @@ class EnemyManager {
             }
         });
     }
+    getAllEnemies() {
+        const enemies = [
+            ...this.enemies.getChildren(),
+            ...this.rangedEnemies.getChildren()
+        ]; 
+        return enemies;
+    }
 
     updateEnemies(time, delta) {
-        this.enemyGroup.children.each(enemy => {
+        this.enemies.children.each(enemy => {
             if (enemy.active) {
                 enemy.update(time, delta); 
             }
@@ -57,8 +60,10 @@ class EnemyManager {
             enemy.actions.push(this.scene.time.addEvent({
                 delay: damageInterval,       
                 callback: () => {
-                    console.log(tower.active, enemy.active);
-                    if (tower.active && enemy.active) { 
+                    if (tower.active && enemy.active) {
+                        if (enemy instanceof HealerEnemy){
+                            return;
+                        } 
                         tower.takeDamage(enemy.damage);
                         if (tower.remainingHitpoints <= 0) {
                             tower.destroy();       
@@ -74,14 +79,12 @@ class EnemyManager {
     }
     stopDamageOverTime(enemy) {
         if (enemy.active){
-            console.log(enemy);
             enemy.setVelocityX(-enemy.speed * 50);
             enemy.isEngaged = false;
             if (enemy.actions.length > 0){ 
                 enemy.actions.forEach(action => {
                     action.remove();
                 });
-                console.log(enemy.actions);
                 enemy.isDamaging = false;   
             }
         }

@@ -1,7 +1,6 @@
 import { Projectile } from '../Projectile.js';
 class Enemy extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, row, enemyConfig) {
-        console.log(enemyConfig);
         super(scene, x, y,enemyConfig.name);
         this.name = enemyConfig.name;
         this.row = row;
@@ -12,6 +11,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.score = enemyConfig.score;
         this.sprite = enemyConfig.sprite;
         this.sound = enemyConfig.sound;
+        this.attackSpeed = enemyConfig.fire_rate;
         this.actions = [];
         this.isEngaged = false;
     }
@@ -46,13 +46,21 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
             duration: 500,
         });
     }
-    die() {
-        this.scene.playerCurrency += this.reward;
+    die(addScore = true) {
+        if (addScore) {
+            this.scene.events.emit('addScore', this.score);
+        }
+        if (this.actions.length > 0) {
+            for (let i = 0; i < this.actions.length; i++) {
+                this.actions[i].remove();
+            }
+        }
+        this.playDeathAnimation();
         this.destroy();
     }
     update() {
         if (this.x < 0) {
-            this.destroy(); 
+            this.die(false); 
         }
     }
 }
