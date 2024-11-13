@@ -14,9 +14,11 @@ class MyGame extends Phaser.Scene {
         super({ key: 'MyGame' ,debug: true});
         this.music = {};
         this.background = null; 
+        this.environmentLayer = null;
         this.gridCells = [];
         this.towers = [];
         this.enemies = [];
+        this.score = 0;
         this.currency = 300;
         this.placedTowers = {};
         this.enemies = {};
@@ -38,7 +40,9 @@ class MyGame extends Phaser.Scene {
         this.load.image('healEffect', 'storage/assets/misc/heal_effect.webp');
         this.load.image('upgradeButton', 'storage/assets/misc/upgrade_button.png');
         this.load.image('buildButton', 'storage/assets/misc/build_button.png');
+        this.load.image('rock', 'storage/assets/env/rock.png');
         this.load.json('waveData', 'storage/json/waveConfig.json');
+
         const towersPromise = loadTowers.call(this).then((towers) => {
             this.towers = towers;
             this.towers.forEach(tower => {
@@ -67,6 +71,7 @@ class MyGame extends Phaser.Scene {
     }
 
     create() {
+        this.add.circle
         this.time.delayedCall
         initialize(this);
         this.OreMines[2].purchase();
@@ -88,6 +93,7 @@ class MyGame extends Phaser.Scene {
                 volume: 0.3, 
                 loop: false  
             });
+            console.log(this.music)
             createTowerSelectionUI(this);
             const waveData = this.cache.json.get('waveData');
             this.waveController = new WaveController(this, waveData);
@@ -122,6 +128,15 @@ class MyGame extends Phaser.Scene {
             this.enemyManager.updateEnemies(time, delta);
             this.enemyManager.updateRangedEnemies(time, delta);
         }
+    }
+    createEnvironmentSprites() {
+        const tree = this.add.sprite(300, 400, 'rock');
+        tree.setScale(0.5);  
+        this.environmentLayer.add(tree);
+
+        const rock = this.add.sprite(1000, 600, 'rock');
+        rock.setScale(0.5);
+        this.environmentLayer.add(rock);
     }
 }
 const config = {

@@ -1,7 +1,6 @@
 import { gridConfig } from '../gridConfig.js';
 import { Spawner } from './EnemySpawner.js';
-import { RangedEnemy } from './enemies/RangedEnemy.js';
-import { HealerEnemy } from './enemies/EnemyHealer.js';
+
 class EnemyManager {
     constructor(scene) {
         this.scene = scene; 
@@ -11,7 +10,7 @@ class EnemyManager {
     }
 
     addEnemy(enemy) {
-        if (enemy instanceof RangedEnemy) {
+        if (enemy.type == 'ranged') {
             this.rangedEnemies.add(enemy);
         } else {
             this.enemies.add(enemy);
@@ -41,27 +40,37 @@ class EnemyManager {
     updateEnemies(time, delta) {
         this.enemies.children.each(enemy => {
             if (enemy.active) {
-                enemy.update(time, delta); 
+                enemy.combinedUpdate(time, delta); 
             }
         });
     }
     updateRangedEnemies(time, delta) {
         this.rangedEnemies.children.each(enemy => {
             if (enemy.active) {
-                enemy.checkEnemyRange(); 
+                enemy.combinedUpdate(); 
             }
         });
     }
     startDamageOverTime(enemy, tower) {
+        if (enemy.type == "teleporter"){
+            if (enemy.justTeleported){
+                enemy.justTeleported = false;
+                return;
+            }
+        }
         if (!enemy.isEngaged){
+            console.log("starting damage over time");
             enemy.isEngaged = true;
             enemy.setVelocityX(0);
-            const damageInterval = 1000;
-            enemy.actions.push(this.scene.time.addEvent({
+            const damageInterval = enemy.attackSpeed * 1000;
+            const event = this.scene.time.addEvent({
                 delay: damageInterval,       
                 callback: () => {
+                    console.log("starting back up");
+                    console.log(tower.active, enemy.active);
+                    console.log(enemy);
                     if (tower.active && enemy.active) {
-                        if (enemy instanceof HealerEnemy){
+                        if (enemy.type == "healer"){
                             return;
                         } 
                         tower.takeDamage(enemy.damage);
@@ -74,19 +83,20 @@ class EnemyManager {
                     }
                 },
                 loop: true                    
-            }));
+            });
+            enemy.actions["damage"] = event;
         }
     }
     stopDamageOverTime(enemy) {
+        if (enemy.actions["damage"]){ 
+            enemy.actions["damage"].remove();
+            delete enemy.actions["damage"];
+            enemy.isDamaging = false;   
+        }
         if (enemy.active){
             enemy.setVelocityX(-enemy.speed * 50);
             enemy.isEngaged = false;
-            if (enemy.actions.length > 0){ 
-                enemy.actions.forEach(action => {
-                    action.remove();
-                });
-                enemy.isDamaging = false;   
-            }
+            console.log("shutting down");
         }
     }    
     resetEnemies() {

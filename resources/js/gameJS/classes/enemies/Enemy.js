@@ -2,7 +2,9 @@ import { Projectile } from '../Projectile.js';
 class Enemy extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, row, enemyConfig) {
         super(scene, x, y,enemyConfig.name);
+        console.log(enemyConfig);
         this.name = enemyConfig.name;
+        this.type = [];
         this.row = row;
         this.remainingHealth = enemyConfig.health;
         this.health = enemyConfig.health;
@@ -11,9 +13,12 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.score = enemyConfig.score;
         this.sprite = enemyConfig.sprite;
         this.sound = enemyConfig.sound;
-        this.attackSpeed = enemyConfig.fire_rate;
-        this.actions = [];
+        this.attackSpeed = enemyConfig.attack_speed;
+        this.actions = {};
+        this.updates = [];
+        this.dies = [];
         this.isEngaged = false;
+        this.takeNoStraightDamage = false;
     }
     takeDamage(amount) {
         this.remainingHealth -= amount;
@@ -46,19 +51,19 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
             duration: 500,
         });
     }
-    die(addScore = true) {
+    baseDie(addScore = true) {
         if (addScore) {
             this.scene.events.emit('addScore', this.score);
         }
-        if (this.actions.length > 0) {
-            for (let i = 0; i < this.actions.length; i++) {
-                this.actions[i].remove();
+        for (const key in this.actions) {
+            if (this.actions.hasOwnProperty(key)) {
+                this.actions[key].remove();
             }
         }
         this.playDeathAnimation();
         this.destroy();
     }
-    update() {
+    baseUpdate() {
         if (this.x < 0) {
             this.die(false); 
         }

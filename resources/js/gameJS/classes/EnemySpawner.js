@@ -24,6 +24,12 @@ class Spawner {
             this.spawnEvent = null;
         }
     }
+    setPosition(x, y) {
+        this.x = x;
+        this.y = y;
+        this.spawnX = x;
+        this.spawnY = y;
+    }
     spawnEnemyRandom() {
         const enemyConfigKeys = Object.keys(this.enemyConfigList);
         const randomKey = Phaser.Utils.Array.GetRandom(enemyConfigKeys);

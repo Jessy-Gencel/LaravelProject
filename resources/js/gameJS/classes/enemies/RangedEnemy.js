@@ -1,9 +1,10 @@
 import { Enemy } from "./Enemy";
 import { Projectile } from "../Projectile";
 
-class RangedEnemy extends Enemy{
-    constructor(scene, x, y, row, enemyConfig){
+const RangedEnemyMixin = (Base) => class extends Base {
+    constructor(scene, x, y, row, enemyConfig) {
         super(scene, x, y, row, enemyConfig);
+        this.type.push("ranged");
         this.range = enemyConfig.range;
         this.fireRate = enemyConfig.fire_rate;
         this.projectileSprite = enemyConfig.projectile_sprite;
@@ -12,8 +13,10 @@ class RangedEnemy extends Enemy{
         this.predictedHealth = null;
         this.target = null;
         this.isFiring = false;
+        this.updates.push("rangedUpdate");
     }
-    shoot(){
+
+    shoot() {
         const projectile = new Projectile(
             this.scene,
             this.x,
@@ -25,30 +28,37 @@ class RangedEnemy extends Enemy{
         );
         this.scene.projectileManager.addEnemyProjectile(projectile);
     }
+
     startShooting() {
         this.isFiring = true;
         this.setVelocityX(0);
-        this.actions.push(this.scene.time.addEvent({
-            delay: 3000, 
+        const event = this.scene.time.addEvent({
+            delay: this.fireRate * 1000,
             callback: () => {
                 this.shoot();
                 this.checkEnemyRange(true);
             },
             loop: true
-        }));
+        });
+        this.actions["shoot"] = event;
     }
+
+    rangedUpdate(time, delta) {
+        this.checkEnemyRange();
+    }
+
     checkEnemyRange(shot = false) {
-        if (this.target){
-            if (shot){
+        if (this.target) {
+            if (shot) {
                 this.predictedHealth = this.target.remainingHitpoints - this.damage;
-                if (this.predictedHealth <= 0){
+                if (this.predictedHealth <= 0) {
                     this.interruptShooting();
                     return false;
                 }
             }
             return true;
         }
-        const row = this.row; 
+        const row = this.row;
         const towersInRow = this.scene.placedTowers[row];
         if (towersInRow) {
             for (let col = Object.keys(towersInRow).length - 1; col >= 0; col--) {
@@ -66,16 +76,14 @@ class RangedEnemy extends Enemy{
         }
         return false;
     }
+
     interruptShooting() {
         this.target = null;
         this.isFiring = false;
         this.predictedHealth = null;
         this.setVelocityX(-this.speed * 50);
-        this.actions.forEach(action => {
-            action.remove();
-        });
+        this.actions["shoot"].remove();
         return false;
     }
-
-}
-export { RangedEnemy };
+};
+export {RangedEnemyMixin}

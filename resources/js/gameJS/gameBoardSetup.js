@@ -3,6 +3,9 @@ import {gridConfig} from './gridConfig.js';
 function setBackground(game) {
     game.background = game.add.tileSprite(0, 0, window.innerWidth, window.innerHeight, 'background');
     game.background.setOrigin(0, 0);
+    game.environmentLayer = game.add.container(0, 0);
+    game.createEnvironmentSprites();
+    game.environmentLayer.setDepth(-1);
 }
 function makeGrid(game) {
     const graphics = game.add.graphics(); 
@@ -12,6 +15,7 @@ function makeGrid(game) {
             const x = col * gridConfig.squareWidth + gridConfig.startOffsetx;
             const y = row * gridConfig.squareHeight + gridConfig.startOffsety;
             graphics.strokeRect(x, y, gridConfig.squareWidth, gridConfig.squareHeight);
+            graphics.alpha = 0.08;
         }
     }
 }

@@ -32,9 +32,25 @@ class ProjectileManager {
     }
 
     handleCollision(projectile, enemy) {
-        enemy.takeDamage(projectile.damage); 
-        if (enemy.remainingHealth <= 0) {
-            enemy.die();
+        console.log(enemy.type);
+        for (let type of enemy.type) {
+            if (type == "cloaked"){
+                if (enemy.isCloaked){
+                    return;
+                }
+            }
+            if (type == "barrier" && !enemy.barrierBroken) {
+                this.handleBarrierProjectileCollision(projectile, enemy);
+            }
+            if (type == "teleporter") {
+                enemy.teleport();
+            }
+        }
+        if (!enemy.takeNoStraightDamage) {
+            enemy.takeDamage(projectile.damage); 
+            if (enemy.remainingHealth <= 0) {
+                enemy.die();
+            }
         }
         projectile.destroy(); 
     }
@@ -44,6 +60,13 @@ class ProjectileManager {
             tower.destroy();
         }
         projectile.destroy();
+    }
+    handleBarrierProjectileCollision(projectile, enemy) {
+        enemy.takeBarrierDamage(projectile.damage);
+        console.log('barrier hit');
+        console.log(enemy.barrierHealth);
+        console.log(projectile.damage);
+        console.log(enemy.remainingHealth)
     }
     update(delta) {
         this.projectiles.getChildren().forEach(projectile => {

@@ -6,6 +6,7 @@ import {setupUIHandlers,updateCurrencyText} from './setupUIHandlers.js';
 import { setupOreMines } from './setupOreMines.js';
 import { setupPlacedTowersDict } from './setupPlacedTowersDict.js';
 import { setBackground,makeGrid } from './gameBoardSetup.js';
+import { makeScoreboard } from './makeScoreboard.js';
 
 function initialize(game){
     game.projectileManager = new ProjectileManager(game);
@@ -18,5 +19,6 @@ function initialize(game){
     setupUIHandlers(game);
     setupOreMines(game);
     setupPlacedTowersDict(game);
+    makeScoreboard(game);
 }
 export {initialize};
