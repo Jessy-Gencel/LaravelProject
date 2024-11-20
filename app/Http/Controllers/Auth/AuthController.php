@@ -72,6 +72,9 @@ class AuthController extends Controller
         $user->profile()->create([
             'username' => Str::random(12), 
         ]);
+        $user->leaderboard()->create([
+            'highscore' => 0,
+        ]);
         return redirect()->route('home')->with('success', 'Registration successful!');
     }
     public function logout(Request $request)

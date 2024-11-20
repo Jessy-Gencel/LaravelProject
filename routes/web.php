@@ -9,36 +9,79 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\GameLogic\GameController;
+use App\Http\Controllers\LeaderboardController;
+
+// Home routes
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/', 'index')->name('home');
+    Route::post('/', 'uploadImage')->name('upload.image');
+});
+
+// Auth routes
+Route::controller(AuthController::class)->group(function () {
+    Route::get('/login', 'showLoginForm')->name('login');
+    Route::post('/login', 'login');
+    Route::get('/register', 'showRegistrationForm')->name('register');
+    Route::post('/register', 'register');
+    Route::post('/logout', 'logout')->name('logout');
+});
+
+// Profile routes 
+Route::prefix('profile')->name('profile.')->group(function () {
+    Route::middleware('auth')->group(function () {
+        Route::get('/', [ProfileController::class, 'show'])->name('index');
+        Route::post('/edit', [ProfileController::class, 'edit'])->name('edit');
+    });
+    Route::get('view/{id}', [ProfileController::class, 'viewProfile'])->name('view');
+});
+
+// FAQ routes
+Route::controller(FaqController::class)->group(function () {
+    Route::get('/faq', 'index')->name('faq');
+    Route::middleware('auth')->group(function () {
+        Route::get('/addQuestion', 'showAddQuestionForm')->name('addQuestion');
+        Route::post('/addQuestion/store', 'storeQuestion')->name('saveFAQ');
+    });
+});
+
+// File upload routes
+Route::controller(FileUploadController::class)->prefix('upload')->name('upload.')->group(function () {
+    Route::get('/', 'showForm')->name('form');
+    Route::post('/file', 'uploadFile')->name('file');
+});
+
+// Contact routes
+Route::controller(ContactController::class)->prefix('contact')->name('contact.')->group(function () {
+    Route::get('/', 'show')->name('show');
+    Route::post('/send', 'submit')->name('submit');
+});
+
+// News routes
+Route::controller(NewsController::class)->prefix('news')->name('news.')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::middleware('auth')->group(function () {
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::post('/update', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+        Route::post('/comments', 'storeComment')->name('comments.store');
+        Route::delete('/comments/destroy/{id}', 'destroyComment')->name('comments.destroy');
+        Route::post('/comments/update/{id}', 'updateComment')->name('comments.update');
+    });
+});
+
+// Game routes
+Route::middleware('auth')->prefix('game')->name('game.')->group(function () {
+    Route::get('/', [GameController::class, 'index'])->name('index');
+});
+
+// Leaderboard routes
+Route::controller(LeaderboardController::class)->prefix('leaderboard')->name('leaderboard.')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::post('/update', 'updateHighscore')->name('update');
+});
 
 
-
-
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::post('/', [HomeController::class, 'uploadImage']);
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
-Route::get('/upload', [FileUploadController::class, 'showForm'])->name('uploadForm');
-Route::post('/upload', [FileUploadController::class, 'uploadFile'])->name('uploadFile');
-Route::get('/profile', [ProfileController::class, 'show'])->name('profile')->middleware('auth');
-Route::post('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit')->middleware('auth');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-Route::get('/faq', [FaqController::class, 'index'])->name('faq');
-Route::get('/addQuestion', [FAQController::class, 'showAddQuestionForm'])->name('addQuestion');
-Route::post('/addQuestion', [FAQController::class, 'storeQuestion'])->name('saveFAQ');
-Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
-Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
-Route::get('/news', [NewsController::class, 'index'])->name('news.index');
-Route::get('/news/create', [NewsController::class, 'create'])->name('news.create')->middleware('auth');
-Route::post('/news', [NewsController::class, 'store'])->name('news.store')->middleware('auth');
-Route::post('/news', [NewsController::class, 'update'])->name('news.update')->middleware('auth');
-Route::delete('/news/{id}', [NewsController::class, 'destroy'])->name('news.destroy')->middleware('auth');
-Route::post('/news/comments', [NewsController::class, 'storeComment'])->name('news.comments.store')->middleware('auth');
-Route::delete('/news/comments/{id}', [NewsController::class, 'destroyComment'])->name('news.comments.destroy')->middleware('auth');
-Route::post('/news/comments/{id}', [NewsController::class, 'updateComment'])->name('news.comments.update')->middleware('auth');
-Route::post('/upload-image', [HomeController::class, 'uploadImage'])->name('upload.image');
-Route::get('/game', [GameController::class, 'index'])->name('game.index');
 
 
 

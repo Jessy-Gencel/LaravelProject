@@ -11,14 +11,16 @@ class EditableField extends Component
     public $name;
     public $type;
     public $validationType;
+    public $editable;
 
-    public function __construct($label, $value, $name, $type, $validationType = 'NONE')
+    public function __construct($label, $value, $name, $type, $validationType = 'NONE', $editable = true)
     {
         $this->label = $label;
         $this->value = $value;
         $this->name = $name;
         $this->type = $type;
         $this->validationType = $validationType;
+        $this->editable = $editable;
     }
 
     public function render()

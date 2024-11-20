@@ -44,5 +44,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(News::class);
     }
+    public function leaderboard()
+    {
+        return $this->hasOne(Leaderboard::class);
+    }
 
 }

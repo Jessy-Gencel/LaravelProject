@@ -1,9 +1,10 @@
 <header class="bg-gray-800 p-4 shadow-md">
     <div class="container mx-auto flex justify-between items-center">
-        <h1 class="text-xl font-bold text-white">My Laravel App</h1>
+        <h1 class="text-xl font-bold text-white">Alien Defense</h1>
         <nav class="flex space-x-4">
             <ul class="flex space-x-4 items-center">
                 <li><a href="{{ route('home') }}" class="hover:text-gray-400 text-white">Home</a></li>
+                <li><a href="{{ route('leaderboard.index') }}" class="hover:text-gray-400 text-white">Leaderboard</a></li>
                 <li><a href="{{route('news.index')}}" class="hover:text-gray-400 text-white">News</a></li>
                 <li><a href="{{route('faq')}}" class="hover:text-gray-400 text-white">FAQ</a></li>
                 <li><a href="{{route('contact.show')}}" class="hover:text-gray-400 text-white">Contact</a></li>

@@ -21,3 +21,11 @@ body {
 .max-h-800 {
     max-height: 700px;
 }
+
+tr:hover td {
+    color: black; /* Change text color to black */
+    border-color: black;
+}
+table {
+    border-collapse: collapse; /* Ensures single borders */
+}

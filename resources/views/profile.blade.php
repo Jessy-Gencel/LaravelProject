@@ -1,10 +1,17 @@
 @extends('layouts.pageWithProfile')
 
 @section('content')
+<div class="flex items-center space-x-4 mb-6">
+    <img src="{{ asset('storage/images/' . $user->profile->pfp) }}" alt="Profile Picture" class="w-24 h-24 rounded-full border border-gray-300">
+    <div>
+        <h2 class="text-gray-600 text-xl font-semibold">{{ $user->profile->username}}</h2>
+        <p class="text-gray-600">{{ $user->email }}</p>
+    </div>
+</div>
 <form action="{{ route('profile.edit') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
-    <x-editable-field label="Username" value="{{ $user->profile->username }}" name="username" type="text" validationType="username"/>
+    <x-editable-field label="Username" value="{{ $user->profile->username }}" name="username" type="text" validationType="username" />
     <x-editable-field label="Email" value="{{ $user->email }}" name="email" type="text" validationType="email" />
     
     <div class="mt-4">
