@@ -10,6 +10,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\GameLogic\GameController;
 use App\Http\Controllers\LeaderboardController;
+use App\Http\Controllers\AdminController;
 
 // Home routes
 Route::controller(HomeController::class)->group(function () {
@@ -24,6 +25,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');
     Route::post('/logout', 'logout')->name('logout');
+    Route::get('/blacklisted', 'showBlacklisted')->name('blacklisted');
 });
 
 // Profile routes 
@@ -79,6 +81,10 @@ Route::middleware('auth')->prefix('game')->name('game.')->group(function () {
 Route::controller(LeaderboardController::class)->prefix('leaderboard')->name('leaderboard.')->group(function () {
     Route::get('/', 'index')->name('index');
     Route::post('/update', 'updateHighscore')->name('update');
+});
+Route::controller(AdminController::class)->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/blacklist', 'getBlacklist')->name('blacklist');
+    Route::post('/blacklist/{userId}', 'blacklistUser')->name('blacklist.toggle');
 });
 
 

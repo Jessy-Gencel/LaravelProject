@@ -8,10 +8,11 @@ use App\Models\Tower;
 use App\Models\Enemy;
 use Illuminate\Support\Facades\Log;
 
+
 class GameController extends Controller
 {
     public function index()
-    {
+    {  
         return view('game/index');
     }
     public function getTowers()

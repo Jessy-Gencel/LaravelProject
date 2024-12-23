@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Profile;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 
 class AuthController extends Controller
@@ -84,5 +85,9 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login')->with('success', 'Logged out successfully!');
+    }
+    public function showBlacklisted()
+    {
+        return view('blacklisted');
     }
 }
