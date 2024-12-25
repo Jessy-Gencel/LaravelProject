@@ -43,6 +43,7 @@ Route::controller(FaqController::class)->group(function () {
     Route::middleware('auth')->group(function () {
         Route::get('/addQuestion', 'showAddQuestionForm')->name('addQuestion');
         Route::post('/addQuestion/store', 'storeQuestion')->name('saveFAQ');
+        Route::delete('/delete/{id}', 'deleteFaq')->name('faq.delete');
     });
 });
 
@@ -83,8 +84,12 @@ Route::controller(LeaderboardController::class)->prefix('leaderboard')->name('le
     Route::post('/update', 'updateHighscore')->name('update');
 });
 Route::controller(AdminController::class)->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/blacklist', 'getBlacklist')->name('blacklist');
+    Route::get('/manageUsers', 'getUserManagement')->name('userManagement');
     Route::post('/blacklist/{userId}', 'blacklistUser')->name('blacklist.toggle');
+    Route::post('/admin/{userId}', 'adminUser')->name('admin.toggle');
+    Route::get('/user/create', 'makeNewUser')->name('user.create');
+    Route::post('/user/store', 'storeUser')->name('user.store');
+    Route::delete('/user/delete/{id}', 'deleteUser')->name('user.delete');
 });
 
 

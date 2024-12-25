@@ -1,15 +1,18 @@
 @extends('layouts.pageWithHeaderAndFooter')
 @section('content')
 <div id='newsContent' class="container mx-auto py-8" hidden>
-    <div class="mt-8 mb-4">
-        <a href="{{ route('news.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Create News Article
-        </a>
-    </div>
+    @isAdmin
+        <div class="mt-8 mb-4">
+            <a href="{{ route('news.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Create News Article
+            </a>
+        </div>
+    @endIsAdmin
         @foreach($newsItems as $news)
             <div x-data="{ openNews: false, showEditOverlay: false,openComment: false, openAllComments: false  }" class="border rounded-lg p-4 mb-8 shadow-md bg-gray-800 border-gray-700 relative">
                 <div class="flex justify-between items-center mb-4 cursor-pointer" @click="if (!showEditOverlay) openNews = !openNews">
                     <h2 class="text-xl font-semibold text-white">{{ $news->title }}</h2>
+                    @isAdmin
                         <div class="flex space-x-2">
                             <button @click.stop="showEditOverlay = true" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded">Edit</button>
                             <form action="{{ route('news.destroy', $news->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this news article?');">
@@ -18,6 +21,7 @@
                                 <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Discard</button>
                             </form>
                         </div>
+                    @endIsAdmin
                 </div>
                 <div x-show="openNews" class="mt-2">
                     <div class="flex space-x-4">
@@ -26,23 +30,25 @@
                     </div>
                     <p class="text-gray-400">Author: {{ $news->user->profile->username }}</p>
                     <p class="text-gray-400">Published on: {{ $news->created_at->format('F j, Y') }}</p>
-                    <div class="mt-4">
-                        <button @click="openComment = !openComment" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Leave a Comment</button>
-                        <div x-show="openComment" class="mt-4">
-                            <form action="{{route("news.comments.store")}}" method="POST">
-                                @csrf
-                                <input type="hidden" name="news_id" value="{{ $news->id }}">
-                                <div class="mb-4">
-                                    <label for="comment" class="block text-gray-50 font-medium">Comment</label>
-                                    <textarea id="comment" name="comment" class="border rounded p-2 w-full bg-gray-900 text-white border-gray-700" rows="3" required></textarea>
-                                </div>
-                                <div class="flex justify-end space-x-2">
-                                    <button type="button" @click="openComment = false" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Cancel</button>
-                                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Post Comment</button>
-                                </div>
-                            </form>
+                    @auth
+                        <div class="mt-4">
+                            <button @click="openComment = !openComment" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Leave a Comment</button>
+                            <div x-show="openComment" class="mt-4">
+                                <form action="{{route("news.comments.store")}}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="news_id" value="{{ $news->id }}">
+                                    <div class="mb-4">
+                                        <label for="comment" class="block text-gray-50 font-medium">Comment</label>
+                                        <textarea id="comment" name="comment" class="border rounded p-2 w-full bg-gray-900 text-white border-gray-700" rows="3" required></textarea>
+                                    </div>
+                                    <div class="flex justify-end space-x-2">
+                                        <button type="button" @click="openComment = false" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Cancel</button>
+                                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Post Comment</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    @endauth
                     <div class="mt-4">
                         <button @click="openAllComments = !openAllComments" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">Show Comments</button>
                         <div x-show="openAllComments" class="mt-4">
@@ -50,7 +56,7 @@
                             <div x-data="{ editComment: false }" class="border rounded-lg p-4 mb-4 shadow-md bg-gray-700 border-gray-600">
                                 <p class="text-white">{{ $comment->content }}</p>
                                 <p class="text-gray-400 text-sm">By: {{ $comment->user->profile->username }} on {{ $comment->created_at->format('F j, Y') }}</p>
-                                @if(Auth::check() && (Auth::user()->isAdmin || Auth::id() == $comment->user_id))
+                                @isAdmin
                                     <div class="flex space-x-2 mt-2">
                                         <button @click="editComment = true" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded">Edit</button>
                                         <form action="{{ route('news.comments.destroy', $comment->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this comment?');">
@@ -72,7 +78,7 @@
                                             </div>
                                         </form>
                                     </div>
-                                @endif
+                                @endIsAdmin
                             </div>
                             @endforeach
                         </div>

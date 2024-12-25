@@ -8,6 +8,6 @@
         </div>
     </div>
     
-    <input name="profile_picture" type="file" id="fileInput" class="hidden" accept="image/*" onchange="uploadProfilePicture(event)">
+    <input name="profile_picture" type="file" id="fileInput" class="hidden" accept="image/*">
 </div>
 @vite('resources/js/EditPFP.js')

@@ -26,15 +26,14 @@
                 </p>
             </div>
         
-            <!-- Grid of Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Card for Blacklisting -->
                 <x-admin-card 
                     icon="bi bi-x-circle-fill" 
                     iconColor="text-danger" 
-                    title="Blacklisting" 
-                    description="Block users or content from your platform." 
-                    route="{{ route('admin.blacklist') }}" 
+                    title="User Management" 
+                    description="Manage users on your platform." 
+                    route="{{ route('admin.userManagement') }}" 
                     buttonText="Manage" 
                 />
         
@@ -89,6 +88,17 @@
                 />
             </div>
         </div>
-    
     @endIsAdmin
+    @if (!Auth::check())
+        <div class="container mx-auto py-10">
+            <div class="bg-gray-800 text-center mb-8 p-6 rounded-lg shadow-lg">
+                <h1 class="text-4xl font-extrabold text-white tracking-tight mb-2">
+                    Welcome to Alien Defense!
+                </h1>
+                <p class="text-lg text-gray-300">
+                    Please login to play the game.
+                </p>
+            </div>
+        </div>
+    @endif
 @endsection

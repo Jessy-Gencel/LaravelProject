@@ -1,7 +1,6 @@
 <div class="col">
     <div class="bg-white shadow-md rounded-lg p-6 text-center hover:shadow-lg transition-shadow duration-300">
         <div class="mb-4">
-            <!-- Icon with dynamic color -->
             <i class="{{ $icon }} text-4xl {{ $iconColor }}"></i>
         </div>
         <h3 class="text-xl font-bold text-gray-800">{{ $title }}</h3>

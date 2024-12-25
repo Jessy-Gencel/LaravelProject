@@ -34,19 +34,11 @@ class NewsController extends Controller
 
     public function create()
     {
-        if (!$this->authService->isAuthenticated() || !$this->authService->isAdmin()) {
-            return redirect()->route('news.index')->with('error', 'Unauthorized action.');
-        }
-
         return view('news.create');
     }
 
     public function store(Request $request)
     {
-        if (!$this->authService->isAuthenticated() || !$this->authService->isAdmin()) {
-            return redirect()->route('news.index')->with('error', 'Unauthorized action.');
-        }
-
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
@@ -54,6 +46,7 @@ class NewsController extends Controller
         ]);
 
         $data = [
+            'user_id' => Auth::id(),
             'title' => $request->input('title'),
             'content' => $request->input('content'),
         ];
@@ -69,9 +62,6 @@ class NewsController extends Controller
 
     public function edit($id)
     {
-        if (!$this->authService->isAuthenticated() || !$this->authService->isAdmin()) {
-            return redirect()->route('news.index')->with('error', 'Unauthorized action.');
-        }
 
         $newsItem = News::findOrFail($id);
         return view('news.edit', compact('newsItem'));
@@ -79,10 +69,6 @@ class NewsController extends Controller
 
     public function update(Request $request)
     {
-        if (!$this->authService->isAuthenticated() || !$this->authService->isAdmin()) {
-            return redirect()->route('news.index')->with('error', 'Unauthorized action.');
-        }
-
         $newsItem = News::find($request -> input('id'));
         $request->validate([
             'title' => 'required|string|max:255',
@@ -107,10 +93,6 @@ class NewsController extends Controller
 
     public function destroy($id)
     {
-        if (!$this->authService->isAuthenticated() || !$this->authService->isAdmin()) {
-            return redirect()->route('news.index')->with('error', 'Unauthorized action.');
-        }
-
         $newsItem = News::findOrFail($id);
         if ($newsItem->image) {
             Storage::disk('public')->delete($newsItem->image);
@@ -120,10 +102,6 @@ class NewsController extends Controller
     }
     public function storeComment(Request $request)
     {
-        Log::info($request -> all());
-        if (!$this->authService->isAuthenticated()) {
-            return redirect()->route('news.index')->with('error', 'Unauthorized action.');
-        }
         $request->validate([
             'news_id' => 'required|exists:news,id',
             'comment' => 'required|string',
@@ -139,10 +117,6 @@ class NewsController extends Controller
     }
     public function destroyComment($id)
     {
-        if (!$this->authService->isAuthenticated()) {
-            return redirect()->route('news.index')->with('error', 'Unauthorized action.');
-        }
-
         $comment = Comment::find($id);
 
         if ($comment->user_id !== Auth::id() && !$this->authService->isAdmin()) {
@@ -154,10 +128,6 @@ class NewsController extends Controller
     }
     public function updateComment(Request $request,$id)
     {
-        if (!$this->authService->isAuthenticated()) {
-            return redirect()->route('news.index')->with('error', 'Unauthorized action.');
-        }
-
         $comment = Comment::find($id);
 
         $request->validate([

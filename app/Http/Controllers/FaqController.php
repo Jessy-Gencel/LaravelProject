@@ -39,4 +39,10 @@ class FaqController extends Controller
         ]);    
         return redirect()->route('faq')->with('success', 'Question submitted successfully!');
     }
+    public function deleteFaq($id)
+    {
+        $faq = Faq::findOrFail($id);
+        $faq->delete();
+        return redirect()->route('faq')->with('success', 'Question deleted successfully!');
+    }
 }
