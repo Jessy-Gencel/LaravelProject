@@ -26,16 +26,18 @@
             <label for="title" class="block text-gray-300 font-medium">Question Title</label>
             <input type="text" id="title" name="title" class="border rounded p-2 w-full bg-gray-800 text-white" required>
         </div>
-        <div class="mb-4">
-            <label for="description" class="block text-gray-300 font-medium">Question Description</label>
-            <textarea id="description" name="description" class="border rounded p-2 w-full bg-gray-800 text-white" rows="4" required></textarea>
-        </div>
-        @if(auth()->user()->isAdmin)
+        @isNotAdmin
+            <div class="mb-4">
+                <label for="description" class="block text-gray-300 font-medium">Question Description</label>
+                <textarea id="description" name="description" class="border rounded p-2 w-full bg-gray-800 text-white" rows="4" required></textarea>
+            </div>
+        @endIsNotAdmin
+        @isAdmin
             <div class="mb-4">
                 <label for="answer" class="block text-gray-300 font-medium">Answer</label>
                 <textarea id="answer" name="answer" class="border rounded p-2 w-full bg-gray-800 text-white" rows="4"></textarea>
             </div>
-        @endif
+        @endIsAdmin
 
         <button class="bg-blue-500 text-white py-2 px-6 rounded hover:bg-blue-600">
             Submit Question

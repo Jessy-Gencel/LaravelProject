@@ -44,6 +44,10 @@ Route::controller(FaqController::class)->group(function () {
         Route::get('/addQuestion', 'showAddQuestionForm')->name('addQuestion');
         Route::post('/addQuestion/store', 'storeQuestion')->name('saveFAQ');
         Route::delete('/delete/{id}', 'deleteFaq')->name('faq.delete');
+        Route::post('/update/{id}', 'updateFaq')->name('faq.update');
+        Route::post('/faq/update/category', 'updateCategory')->name('faq.updateCategory');
+        Route::get('/faq/details/{id}', 'showDetailsFaq')->name('faq.details');
+        Route::post('/faq/approve/{id}', 'approveFaq')->name('faq.approve');
     });
 });
 
