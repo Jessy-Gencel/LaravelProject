@@ -3,11 +3,19 @@
 <div id='faqContent' class="container mx-auto py-8">
     @isAdmin
         <div class="mt-8 mb-4">
-            <a href="{{ route('addQuestion') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <a href="{{ route('faq.addQuestion') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Add New Question
             </a>
         </div>
     @endIsAdmin
+    @isNotAdmin
+        <div class="mt-8 mb-4">
+            <a href="{{ route('faq.addQuestion') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Ask A New Question
+            </a>
+        </div>
+    @endIsNotAdmin
+    
     @foreach($faqs->groupBy('category') as $category => $faqsInCategory)
         <div x-data="{ openCategory: false, showEditOverlay: false, categoryValue: '{{ $category }}', newCategoryValue: '{{ $category }}' }" 
         class="border rounded-lg p-4 mb-8 shadow-md bg-gray-800 border-gray-700">
@@ -75,7 +83,8 @@
                                             Approve
                                         </a>
                                         <form action="{{ route('faq.delete', $faq->id) }}" method="POST" 
-                                            onsubmit="return confirm('Are you sure you want to reject this FAQ?');">
+                                            onsubmit="return confirm('Are you sure you want to reject this FAQ?');"
+                                            @click.stop>
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">
@@ -136,4 +145,5 @@
     @endforeach
 
 </div>
+@vite('resources/js/alpineLoadingWorkarounds/loadFAQS.js')
 @endsection

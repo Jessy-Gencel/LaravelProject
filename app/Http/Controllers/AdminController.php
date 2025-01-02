@@ -8,7 +8,9 @@ use App\Models\Profile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
-
+use App\Models\ContactRequest;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ContactResponseMail;
 
 class AdminController extends Controller
 {
@@ -104,4 +106,40 @@ class AdminController extends Controller
         return redirect()->route('admin.userManagement')
                         ->with('status', 'User deleted successfully!');
     }        
+    public function showContactDashboard()
+    {
+        $unresolvedRequests = ContactRequest::where('is_resolved', false)->orderBy('created_at', 'desc')->get();
+        $resolvedRequests = ContactRequest::where('is_resolved', true)->orderBy('resolved_at', 'desc')->get();
+        return view('admin.contactDashboard',compact('unresolvedRequests', 'resolvedRequests')); 
+    }
+    public function respondContactRequest(Request $request, $id)
+    {
+        Log::info($request->all());
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'subject' => 'required|string|max:255',
+            'response' => 'required|string',
+        ]);
+        $contactRequest = ContactRequest::findOrFail($id);
+        if (!$contactRequest) {
+            return redirect()->back()->with('error', 'Contact request not found.');
+        }
+        $contactRequest->is_resolved = true;
+        $contactRequest->response = $validated['response'];
+        $contactRequest->response_by = auth()->user()->profile->username; // Assuming the admin is logged in
+        $contactRequest->resolved_at = now();
+        $contactRequest->save();
+        Mail::to($contactRequest->email)->send(new ContactResponseMail($validated['response'],$validated['subject'],$validated['name']));
+
+        return redirect()->route('admin.contactDashboard')->with('success', 'Response sent successfully.');
+    }
+    public function deleteContactRequest($id)
+    {
+        $contactRequest = ContactRequest::findOrFail($id);
+        if (!$contactRequest) {
+            return redirect()->back()->with('error', 'Contact request not found.');
+        }
+        $contactRequest->delete();
+        return redirect()->route('admin.contactDashboard')->with('success', 'Contact request deleted successfully.');
+    }
 }

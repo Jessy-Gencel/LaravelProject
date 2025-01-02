@@ -18,7 +18,7 @@ class ContactRequestMail extends Mailable
 
     public function build()
     {
-        return $this->subject('New Contact Request')
+        return $this->subject("Contact request from " . $this->contactDetails['firstname'] . " " . $this->contactDetails['lastname'])
                     ->view('emails.contact_request');
     }
 }

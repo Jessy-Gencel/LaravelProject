@@ -53,7 +53,7 @@
                     iconColor="text-info" 
                     title="FAQs" 
                     description="Edit and manage frequently asked questions." 
-                    route="{{ route('faq') }}" 
+                    route="{{ route('faq.main') }}" 
                     buttonText="Manage" 
                 />
         
@@ -63,7 +63,7 @@
                     iconColor="text-warning" 
                     title="Contact Us Forms" 
                     description="View and respond to user inquiries." 
-                    route="{{ route('contact.show') }}" 
+                    route="{{ route('admin.contactDashboard') }}" 
                     buttonText="Manage" 
                 />
         

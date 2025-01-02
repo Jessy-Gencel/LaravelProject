@@ -49,6 +49,9 @@ return [
             'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
         ],
 
+        'mailersend' => [
+            'transport' => 'mailersend',
+        ],
         'ses' => [
             'transport' => 'ses',
         ],

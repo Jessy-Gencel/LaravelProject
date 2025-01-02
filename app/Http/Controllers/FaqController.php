@@ -10,13 +10,14 @@ class FaqController extends Controller
 {
     public function index()
     {
-        if (auth()->user()->is_admin) {
+        if (auth()->check() && auth()->user()->is_admin) {
             $faqs = Faq::orderBy('category')->get();
             $categories = Faq::select('category')->distinct()->pluck('category');
-            return view('faq.faq', compact('faqs', 'categories'));
+            return view('faq.adminFaq', compact('faqs', 'categories'));
         }else{
             $faqs = Faq::where('status', 'approved')->with('user')->orderBy('category')->get();
-            return view('faq.faq', compact('faqs'));
+            $categories = Faq::select('category')->distinct()->pluck('category');
+            return view('faq.adminFaq', compact('faqs', 'categories'));
         }
     }
     public function showAddQuestionForm()
@@ -26,6 +27,10 @@ class FaqController extends Controller
     }
     public function storeQuestion(Request $request)
     {    
+        Log::info($request->all());
+        if ($request->category == null) {
+            $request['category'] = "General";
+        }
         $validated = $request->validate([
             'category' => 'required|string|max:255',
             'title' => 'required|string|max:255',
@@ -46,13 +51,13 @@ class FaqController extends Controller
             'status' => auth()->user()->is_admin ? 'approved' : 'pending'
         ]);
 
-        return redirect()->route('faq')->with('success', 'Question submitted successfully!');
+        return redirect()->route('faq.main')->with('success', 'Question submitted successfully!');
     }
     public function deleteFaq($id)
     {
         $faq = Faq::findOrFail($id);
         $faq->delete();
-        return redirect()->route('faq')->with('success', 'Question deleted successfully!');
+        return redirect()->route('faq.main')->with('success', 'Question deleted successfully!');
     }
     public function updateFaq(Request $request, $id)
     {
@@ -63,7 +68,7 @@ class FaqController extends Controller
             'question' => $request->question,
             'answer' => $request->answer
         ]);
-        return redirect()->route('faq')->with('success', 'Question updated successfully!');
+        return redirect()->route('faq.main')->with('success', 'Question updated successfully!');
     }
     public function updateCategory(Request $request)
     {
@@ -73,7 +78,7 @@ class FaqController extends Controller
         ]);
         Faq::where('category', $request->oldCategory)->update(['category' => $request->newCategory]);
         Log::info("yey");
-        return redirect()->route('faq')->with('success', 'Question updated successfully!');
+        return redirect()->route('faq.main')->with('success', 'Question updated successfully!');
     }
     public function showDetailsFaq($id)
     {
@@ -94,6 +99,6 @@ class FaqController extends Controller
             'status' => 'approved'
         ]);
 
-        return redirect()->route('faq')->with('success', 'Question approved successfully!');
+        return redirect()->route('faq.main')->with('success', 'Question approved successfully!');
     }
 }

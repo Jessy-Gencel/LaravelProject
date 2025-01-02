@@ -38,16 +38,16 @@ Route::prefix('profile')->name('profile.')->group(function () {
 });
 
 // FAQ routes
-Route::controller(FaqController::class)->group(function () {
-    Route::get('/faq', 'index')->name('faq');
+Route::prefix('faq')->name('faq.')->controller(FaqController::class)->group(function () {
+    Route::get('/', 'index')->name('main');
+    Route::get('/addQuestion', 'showAddQuestionForm')->name('addQuestion');
+    Route::post('/addQuestion/store', 'storeQuestion')->name('saveFAQ');
     Route::middleware('auth')->group(function () {
-        Route::get('/addQuestion', 'showAddQuestionForm')->name('addQuestion');
-        Route::post('/addQuestion/store', 'storeQuestion')->name('saveFAQ');
-        Route::delete('/delete/{id}', 'deleteFaq')->name('faq.delete');
-        Route::post('/update/{id}', 'updateFaq')->name('faq.update');
-        Route::post('/faq/update/category', 'updateCategory')->name('faq.updateCategory');
-        Route::get('/faq/details/{id}', 'showDetailsFaq')->name('faq.details');
-        Route::post('/faq/approve/{id}', 'approveFaq')->name('faq.approve');
+        Route::delete('/delete/{id}', 'deleteFaq')->name('delete');
+        Route::post('/update/{id}', 'updateFaq')->name('update');
+        Route::post('/update/categories/category', 'updateCategory')->name('updateCategory');
+        Route::get('/details/{id}', 'showDetailsFaq')->name('details');
+        Route::post('/approve/{id}', 'approveFaq')->name('approve');
     });
 });
 
@@ -94,6 +94,9 @@ Route::controller(AdminController::class)->prefix('admin')->name('admin.')->grou
     Route::get('/user/create', 'makeNewUser')->name('user.create');
     Route::post('/user/store', 'storeUser')->name('user.store');
     Route::delete('/user/delete/{id}', 'deleteUser')->name('user.delete');
+    Route::get('/contactDashboard', 'showContactDashboard')->name('contactDashboard');
+    Route::post('/contactDashboard/respond/{id}', 'respondContactRequest')->name('contactRequestResponse');
+    Route::delete('/contactDashboard/delete/{id}', 'deleteContactRequest')->name('contactRequestDelete');
 });
 
 

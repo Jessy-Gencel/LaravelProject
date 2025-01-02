@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use App\Mail\ContactRequestMail;
-
+use Illuminate\Support\Facades\Log;
 
 class ContactController extends Controller
 {
@@ -37,6 +37,7 @@ class ContactController extends Controller
             'email' => $request->input('email'),
             'message' => $request->input('message'),
         ];
+        Log::info('Contact request from ' . $contactDetails['firstname'] . ' ' . $contactDetails['lastname'] . ' with email ' . $contactDetails['email'] . ' and message: ' . $contactDetails['message']);
         Mail::to('jessy.gencel@student.ehb.be')->send(new ContactRequestMail($contactDetails));
         return redirect()->route('contact.show')->with('success', 'Your message has been sent successfully.');
     }

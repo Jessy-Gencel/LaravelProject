@@ -6,8 +6,12 @@
                 <li><a href="{{ route('home') }}" class="hover:text-gray-400 text-white">Home</a></li>
                 <li><a href="{{ route('leaderboard.index') }}" class="hover:text-gray-400 text-white">Leaderboard</a></li>
                 <li><a href="{{route('news.index')}}" class="hover:text-gray-400 text-white">News</a></li>
-                <li><a href="{{route('faq')}}" class="hover:text-gray-400 text-white">FAQ</a></li>
-                <li><a href="{{route('contact.show')}}" class="hover:text-gray-400 text-white">Contact</a></li>
+                <li><a href="{{route('faq.main')}}" class="hover:text-gray-400 text-white">FAQ</a></li>
+                @if (Auth::check() && Auth::user()->is_admin)
+                    <li><a href="{{route('admin.contactDashboard')}}" class="hover:text-gray-400 text-white">Contact</a></li>
+                @else
+                    <li><a href="{{route('contact.show')}}" class="hover:text-gray-400 text-white">Contact</a></li>
+                @endif
                 <li class="relative">
                     @if (Auth::check())
                         <div class="profile-circle cursor-pointer">
