@@ -1,6 +1,13 @@
 @extends('layouts.pageWithHeaderAndFooter')
 @section('content')
 <div id='newsContent' class="container mx-auto py-8" hidden>
+    <div class="container mx-auto mt-4">
+        @if(session('status'))
+            <div class="mt-8 mb-4 text-lg {{ session('status_type', 'bg-blue-500') }} text-white font-bold py-4 px-4 rounded-lg shadow-md">
+                {{ session('status') }}
+            </div>
+        @endif
+    </div>
     @isAdmin
         <div class="mt-8 mb-4">
             <a href="{{ route('news.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">

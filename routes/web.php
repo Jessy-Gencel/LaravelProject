@@ -35,12 +35,14 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 // Profile routes 
-Route::prefix('profile')->name('profile.')->group(function () {
+Route::controller(ProfileController::class)->prefix('profile')->name('profile.')->group(function () {
     Route::middleware('auth')->group(function () {
-        Route::get('/', [ProfileController::class, 'show'])->name('index');
-        Route::post('/edit', [ProfileController::class, 'edit'])->name('edit');
+        Route::get('/', 'show')->name('index');
+        Route::post('/edit', 'edit')->name('edit');
+        Route::post('/postComment/{id}', 'postComment')->name('postComment');
+        Route::delete('/deleteComment/{id}', 'deleteComment')->name('deleteComment');
     });
-    Route::get('view/{id}', [ProfileController::class, 'viewProfile'])->name('view');
+    Route::get('view/{id}', 'viewProfile')->name('view');
 });
 
 // FAQ routes
@@ -103,6 +105,7 @@ Route::controller(AdminController::class)->prefix('admin')->name('admin.')->grou
     Route::get('/contactDashboard', 'showContactDashboard')->name('contactDashboard');
     Route::post('/contactDashboard/respond/{id}', 'respondContactRequest')->name('contactRequestResponse');
     Route::delete('/contactDashboard/delete/{id}', 'deleteContactRequest')->name('contactRequestDelete');
+    Route::post('/leaderboard/{id}/illegitimate', 'illegitimateScore')->name('leaderboard.illegitimate');
 });
 
 

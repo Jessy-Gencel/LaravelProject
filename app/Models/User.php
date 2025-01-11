@@ -48,5 +48,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Leaderboard::class);
     }
+    public function profileComments()
+    {
+        return $this->hasMany(ProfileComment::class, 'profile_id');
+    }
 
 }

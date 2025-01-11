@@ -57,7 +57,10 @@ class NewsController extends Controller
 
         News::create($data);
 
-        return redirect()->route('news.index')->with('success', 'News article created successfully.');
+        return redirect()->route('news.index')->with([
+            'status' => 'News article created successfully!',
+            'status_type' => 'bg-green-500'
+        ]);
     }
 
     public function edit($id)
@@ -88,7 +91,10 @@ class NewsController extends Controller
 
         $newsItem->save();
 
-        return redirect()->route('news.index')->with('success', 'News article updated successfully.');
+        return redirect()->route('news.index')->with([
+            'status' => 'News article updated successfully!',
+            'status_type' => 'bg-green-500'
+        ]);
     }
 
     public function destroy($id)
@@ -98,7 +104,10 @@ class NewsController extends Controller
             Storage::disk('public')->delete($newsItem->image);
         }
         $newsItem->delete();
-        return redirect()->route('news.index')->with('success', 'News article deleted successfully.');
+        return redirect()->route('news.index')->with([
+            'status' => 'News article deleted successfully!',
+            'status_type' => 'bg-green-500'
+        ]);;
     }
     public function storeComment(Request $request)
     {
@@ -113,18 +122,27 @@ class NewsController extends Controller
             'content' => $request->input('comment'),
         ]);
 
-        return redirect()->route('news.index')->with('success', 'Comment posted successfully.');
+        return redirect()->route('news.index')->with([
+            'status' => 'Comment posted successfully!',
+            'status_type' => 'bg-green-500'
+        ]);;
     }
     public function destroyComment($id)
     {
         $comment = Comment::find($id);
 
         if ($comment->user_id !== Auth::id() && !$this->authService->isAdmin()) {
-            return redirect()->route('news.index')->with('error', 'Unauthorized action.');
+            return redirect()->route('news.index')->with([
+                'status' => 'You do not have permission to delete this comment!',
+                'status_type' => 'bg-red-500'
+            ]);
         }
 
         $comment->delete();
-        return redirect()->route('news.index')->with('success', 'Comment deleted successfully.');
+        return redirect()->route('news.index')->with([
+            'status' => 'Comment deleted succesfully!',
+            'status_type' => 'bg-green-500'
+        ]);;
     }
     public function updateComment(Request $request,$id)
     {
@@ -137,6 +155,9 @@ class NewsController extends Controller
         $comment->content = $request->input('content');
         $comment->save();
 
-        return redirect()->route('news.index')->with('success', 'Comment updated successfully.');
+        return redirect()->route('news.index')->with([
+            'status' => 'Comment updated successfully!',
+            'status_type' => 'bg-green-500'
+        ]);;
     }
 }

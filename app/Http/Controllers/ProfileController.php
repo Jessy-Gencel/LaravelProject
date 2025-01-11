@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
+use App\Models\ProfileComment;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -49,5 +51,29 @@ class ProfileController extends Controller
     {
         $user = User::with('profile')->find($id);
         return view('profile_view', compact('user'));
+    }
+    public function postComment(Request $request,$id)
+    {
+        Log::info($id);
+        Log::info(auth()->id());
+        Log::info($request);
+        $validated = $request->validate([
+            'comment' => 'required|string|max:500',
+        ]);
+        // Create the comment
+        ProfileComment::create([
+            'content' => $validated['comment'],
+            'profile_id' => $id,
+            'user_id' => auth()->id(), // The authenticated user's ID
+        ]);
+
+        // Redirect back with a success message
+        return redirect()->back()->with('status', 'Comment added successfully!');
+    }
+    public function deleteComment($id)
+    {
+        $comment = ProfileComment::find($id);
+        $comment->delete();
+        return redirect()->back()->with('status', 'Comment deleted successfully!');
     }
 }

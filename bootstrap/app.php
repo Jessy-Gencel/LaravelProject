@@ -16,6 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             CheckIfBlacklisted::class
         ]);
+        $middleware->api(append: [
+            CheckIfBlacklisted::class
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

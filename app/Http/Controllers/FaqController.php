@@ -51,13 +51,19 @@ class FaqController extends Controller
             'status' => auth()->user()->is_admin ? 'approved' : 'pending'
         ]);
 
-        return redirect()->route('faq.main')->with('success', 'Question submitted successfully!');
+        return redirect()->route('faq.main')->with([
+            'status' => auth()->user()->is_admin ? 'FAQ creation successful, article created successfully!' : 'FAQ creation successful, your question is pending approval!',
+            'status_type' => 'bg-green-500'
+        ]);;
     }
     public function deleteFaq($id)
     {
         $faq = Faq::findOrFail($id);
         $faq->delete();
-        return redirect()->route('faq.main')->with('success', 'Question deleted successfully!');
+        return redirect()->route('faq.main')->with([
+            'status' => 'FAQ deleted successfully!',
+            'status_type' => 'bg-green-500'
+        ]);;
     }
     public function updateFaq(Request $request, $id)
     {
@@ -68,7 +74,10 @@ class FaqController extends Controller
             'question' => $request->question,
             'answer' => $request->answer
         ]);
-        return redirect()->route('faq.main')->with('success', 'Question updated successfully!');
+        return redirect()->route('faq.main')->with([
+            'status' => 'FAQ updated successfully!',
+            'status_type' => 'bg-green-500'
+        ]);;
     }
     public function updateCategory(Request $request)
     {
@@ -78,7 +87,10 @@ class FaqController extends Controller
         ]);
         Faq::where('category', $request->oldCategory)->update(['category' => $request->newCategory]);
         Log::info("yey");
-        return redirect()->route('faq.main')->with('success', 'Question updated successfully!');
+        return redirect()->route('faq.main')->with([
+            'status' => 'Question category updated successfully!',
+            'status_type' => 'bg-green-500'
+        ]);;
     }
     public function showDetailsFaq($id)
     {
@@ -99,6 +111,9 @@ class FaqController extends Controller
             'status' => 'approved'
         ]);
 
-        return redirect()->route('faq.main')->with('success', 'Question approved successfully!');
+        return redirect()->route('faq.main')->with([
+            'status' => 'FAQ approved successfully!',
+            'status_type' => 'bg-green-500'
+        ]);;
     }
 }

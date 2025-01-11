@@ -12,6 +12,13 @@
         </div>
         @if ($pageType == 'login')
             <h2 id="formTitle" class="text-2xl font-bold text-center text-white mb-4">Login</h2>
+
+            @if (session('status'))
+                <div class="mb-4 p-3 rounded bg-green-500 text-white text-center">
+                    {{ session('status') }}
+                </div>
+            @endif
+
             <form id="authForm" action="{{ route('login') }}" method="POST">
                 @csrf
                 <div id="emailField" class="mb-4">
@@ -27,10 +34,10 @@
                 <div class="mb-4">
                     <input type="checkbox" id="remember" name="remember">
                     <label for="remember" class="text-gray-300">Remember Me</label>
-                </div>  
+                </div>
                 <div class="mb-4">
                     <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-500 rounded-md text-white font-semibold">Login</button>
-                </div>              
+                </div>
                 @if ($errors->has('loginError'))
                     <div class="text-red-500 mb-4">{{ $errors->first('loginError') }}</div>
                 @endif

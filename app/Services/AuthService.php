@@ -14,6 +14,6 @@ class AuthService
     public function isAdmin()
     {
         $user = Auth::user();
-        return $user && $user->isAdmin;
+        return $user && $user->is_admin;
     }
 }

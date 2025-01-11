@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\ContactRequest;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactResponseMail;
+use App\Models\Leaderboard;
 
 class AdminController extends Controller
 {
@@ -141,5 +142,18 @@ class AdminController extends Controller
         }
         $contactRequest->delete();
         return redirect()->route('admin.contactDashboard')->with('success', 'Contact request deleted successfully.');
+    }
+    public function illegitimateScore($id)
+    {
+        $entry = Leaderboard::findOrFail($id);
+
+        $entry->highscore = 0;
+        $entry->save();
+        $user = $entry->user; 
+        $user->blacklisted = true;
+        $user->save();
+
+        return redirect()->route('leaderboard.index')->with('status', 'Score marked as illegitimate, and user blacklisted.');
+
     }
 }

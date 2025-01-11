@@ -7,5 +7,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
-Route::get('/towers', GameController::class . '@getTowers');
-Route::get('/enemies', GameController::class . '@getEnemies');
+Route::get('/towers', GameController::class . '@getTowers')->middleware('auth:sanctum');
+Route::get('/enemies', GameController::class . '@getEnemies')->middleware('auth:sanctum');

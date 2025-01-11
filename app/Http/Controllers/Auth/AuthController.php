@@ -30,7 +30,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
         $remember = $request->has('remember');
         if (Auth::attempt($credentials, $remember)) {
-            return redirect()->route('home')->with('success', 'Login successful!');
+            return redirect()->route('home');
         } else {
             return redirect()->back()->withErrors([
                 'loginError' => 'The provided credentials are incorrect.'
@@ -140,7 +140,8 @@ class AuthController extends Controller
         $user->password_reset_code = null;
         session()->forget(['reset_email', 'reset_code']);
         $user->save();
-        return redirect()->route('login')->with('success', 'Password reset successful!');
+        session()->flash('status', 'Your password has been reset successfully. You can now log in.');
+        return redirect()->route('login');
     }
     public function getValidateResetPage()
     {
