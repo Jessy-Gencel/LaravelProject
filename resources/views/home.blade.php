@@ -9,11 +9,6 @@
                 </a>
             </div>
         </div>
-        @if(session('success'))
-            <div class="alert alert-success">
-                <h1>{{ session('success') }}</h1>
-            </div>
-        @endif
     @endIsNotAdmin
     @isAdmin
         <div class="container mx-auto py-10">

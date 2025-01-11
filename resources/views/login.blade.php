@@ -35,7 +35,7 @@
                     <div class="text-red-500 mb-4">{{ $errors->first('loginError') }}</div>
                 @endif
                 <div id="forgotPasswordLink" class="text-center">
-                    <a href="#" class="text-gray-400 hover:text-gray-300">Forgot your password?</a>
+                    <a href="{{ route('password.forgotPassword') }}" class="text-gray-400 hover:text-gray-300">Forgot your password?</a>
                 </div>
             </form>
         @elseif ($pageType == 'register')

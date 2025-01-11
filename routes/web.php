@@ -26,6 +26,12 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/register', 'register');
     Route::post('/logout', 'logout')->name('logout');
     Route::get('/blacklisted', 'showBlacklisted')->name('blacklisted');
+    Route::get('/password/forgotPassword', 'showForgotPasswordForm')->name('password.forgotPassword');
+    Route::post('/password/sendResetCode', 'sendResetCode')->name('password.resetCode');
+    Route::get('password/validateResetPage' , 'getValidateResetPage')->name('password.validateResetPage');
+    Route::post('/password/validateResetCode', 'validateResetCode')->name('password.validateResetCode');
+    Route::get('/password/resetPassword', 'showResetPasswordForm')->name('password.reset');
+    Route::post('/password/performReset', 'performPasswordReset')->name('password.update');
 });
 
 // Profile routes 
