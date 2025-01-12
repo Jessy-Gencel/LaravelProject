@@ -9,6 +9,7 @@ import { loadEnemies } from './enemyLoad.js';
 import { initialize } from './init.js';
 import { WaveController } from './classes/WaveController.js';
 
+
 class MyGame extends Phaser.Scene {
     constructor() {
         super({ key: 'MyGame' ,debug: true});

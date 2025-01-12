@@ -10,7 +10,7 @@ function combineMethods(instance, updateMethods = [], dieMethods = []) {
         }
     };
 
-    instance.combinedDie = function () {
+    instance.combinedDie = function (awardScore = true) {
         dieMethods.forEach(method => {
             if (typeof instance[method] === 'function') {
                 instance[method](); 
@@ -18,7 +18,7 @@ function combineMethods(instance, updateMethods = [], dieMethods = []) {
             }
         });
         if (typeof instance.die === 'function') {
-            instance.baseDie();
+            instance.baseDie(awardScore);
         }
     };
 

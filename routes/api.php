@@ -10,3 +10,4 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth');
 Route::get('/towers', GameController::class . '@getTowers');
 Route::get('/enemies', GameController::class . '@getEnemies');
+Route::get('/gameOverScreen', GameController::class . '@gameOverScreen') -> middleware('auth');

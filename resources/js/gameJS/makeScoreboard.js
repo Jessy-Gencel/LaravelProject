@@ -1,3 +1,4 @@
+
 function makeScoreboard(game){
     game.scoreText = game.add.text(
         game.scale.width / 2,

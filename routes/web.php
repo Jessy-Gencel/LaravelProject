@@ -88,6 +88,8 @@ Route::controller(NewsController::class)->prefix('news')->name('news.')->group(f
 // Game routes
 Route::prefix('game')->name('game.')->group(function () {
     Route::get('/', [GameController::class, 'index'])->name('index');
+    Route::get('/gameOverScreen', [GameController::class,'gameOverScreen']) -> name('gameOverScreen')->middleware('auth');
+    Route::post('/saveScore', [GameController::class,'saveScore']) -> name('saveScore')->middleware('auth');
 });
 
 // Leaderboard routes

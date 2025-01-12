@@ -1,4 +1,5 @@
 import { Projectile } from '../Projectile.js';
+import { gameOverScreen,setGameOverRoute } from '../../gameOverScreen.js';
 class Enemy extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, row, enemyConfig) {
         super(scene, x, y,enemyConfig.name);
@@ -65,6 +66,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
     baseUpdate() {
         if (this.x < 0) {
+            console.log()
+            setGameOverRoute(this.scene.score);
+            gameOverScreen(this.scene);
             this.die(false); 
         }
     }
