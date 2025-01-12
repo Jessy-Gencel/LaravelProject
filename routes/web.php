@@ -86,7 +86,7 @@ Route::controller(NewsController::class)->prefix('news')->name('news.')->group(f
 });
 
 // Game routes
-Route::middleware('auth')->prefix('game')->name('game.')->group(function () {
+Route::prefix('game')->name('game.')->group(function () {
     Route::get('/', [GameController::class, 'index'])->name('index');
 });
 
