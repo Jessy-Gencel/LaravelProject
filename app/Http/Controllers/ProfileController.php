@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\ProfileComment;
 use Illuminate\Support\Facades\Log;
+use App\Models\Achievement;
 
 class ProfileController extends Controller
 {
@@ -44,7 +45,13 @@ class ProfileController extends Controller
             $user->profile->pfp = $filename;
             $user->profile->save();
         }
+        $signupBadge = Achievement::where('name', 'Explorer')->first(); // Adjust the badge name as needed
 
+        if ($signupBadge && !$user->achievements->contains($signupBadge->id)) {
+            $user->achievements()->attach($signupBadge->id, [
+                'awarded_at' => now(),
+            ]);
+        }
         return redirect()->route('profile.index')->with('success', 'Profile updated successfully.');
     }
     public function viewProfile($id)

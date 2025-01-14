@@ -52,5 +52,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(ProfileComment::class, 'profile_id');
     }
+    public function achievements()
+    {
+        return $this->belongsToMany(Achievement::class)
+                    ->withTimestamps()
+                    ->withPivot('awarded_at');
+    }
 
 }

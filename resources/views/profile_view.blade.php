@@ -15,6 +15,24 @@
             <img src="{{ asset('storage/images/' . $user->profile->pfp) }}" 
                  alt="Profile Picture" class="w-20 h-20 rounded-full mr-6">
             <h2 class="text-2xl font-bold">{{ $user->profile->username }}</h2>
+
+        </div>
+        <div class="flex flex-wrap gap-4 mt-4">
+            @foreach ($user->achievements as $achievement)
+                <div class="flex items-center p-2 rounded-lg shadow-md" 
+                     style="background-color: {{ $achievement->color }};">
+                    <!-- Badge Image -->
+                    <img src="{{ asset('storage/images/' . $achievement->icon_path) }}" 
+                         alt="{{ $achievement->name }}" 
+                         class="w-12 h-12 rounded-full border border-gray-300" 
+                         title="{{ $achievement->name }}">
+                    <!-- Badge Text -->
+                    <div class="ml-4">
+                        <h3 class="text-white font-semibold">{{ $achievement->name }}</h3>
+                        <p class="text-white text-sm">{{ $achievement->description }}</p>
+                    </div>
+                </div>
+            @endforeach
         </div>
         <div class="mt-4">
             <p><strong>Email:</strong> {{ $user->email }}</p>

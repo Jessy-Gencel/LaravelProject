@@ -6,6 +6,23 @@
     <div>
         <h2 class="text-gray-600 text-xl font-semibold">{{ $user->profile->username}}</h2>
         <p class="text-gray-600">{{ $user->email }}</p>
+        <div class="flex flex-wrap gap-4 mt-4">
+            @foreach ($user->achievements as $achievement)
+                <div class="flex items-center p-2 rounded-lg shadow-md" 
+                     style="background-color: {{ $achievement->color }};">
+                    <!-- Badge Image -->
+                    <img src="{{ asset('storage/images/' . $achievement->icon_path) }}" 
+                         alt="{{ $achievement->name }}" 
+                         class="w-12 h-12 rounded-full border border-gray-300" 
+                         title="{{ $achievement->name }}">
+                    <!-- Badge Text -->
+                    <div class="ml-4">
+                        <h3 class="text-white font-semibold">{{ $achievement->name }}</h3>
+                        <p class="text-white text-sm">{{ $achievement->description }}</p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
     </div>
 </div>
 <form action="{{ route('profile.edit') }}" method="POST" enctype="multipart/form-data">

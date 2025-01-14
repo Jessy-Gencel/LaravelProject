@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PasswordResetCode;
-
+use App\Models\Achievement;
 
 class AuthController extends Controller
 {
@@ -78,7 +78,14 @@ class AuthController extends Controller
         $user->leaderboard()->create([
             'highscore' => 0,
         ]);
-        return redirect()->route('home')->with('success', 'Registration successful!');
+        $signupBadge = Achievement::where('name', 'Beginner')->first(); // Adjust the badge name as needed
+        if ($signupBadge) {
+            $user->achievements()->attach($signupBadge->id, [
+                'awarded_at' => now(),
+            ]);
+        }
+        Auth::login($user);
+        return redirect()->route('home');
     }
     public function logout(Request $request)
     {

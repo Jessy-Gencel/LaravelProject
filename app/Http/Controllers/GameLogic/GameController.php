@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Tower;
 use App\Models\Enemy;
 use Illuminate\Support\Facades\Log;
+use App\Models\Achievement;
 
 
 class GameController extends Controller
@@ -42,6 +43,23 @@ class GameController extends Controller
             $user->leaderboard->highscore = $score;
         }
         $user->leaderboard->save();
+
+        $milestones = [
+            2000 => 'Alien Guardrail',
+            5000 => 'Alien Bastion',
+            10000 => 'Juggernaut Slayer',
+        ];
+    
+        foreach ($milestones as $threshold => $badgeName) {
+            if ($score >= $threshold) {
+                $badge = Achievement::where('name', $badgeName)->first();
+                if ($badge && !$user->achievements->contains($badge->id)) {
+                    $user->achievements()->attach($badge->id, [
+                        'awarded_at' => now(),
+                    ]);
+                }
+            }
+        }
         return redirect()->route('home');
     }
     
