@@ -17,7 +17,7 @@ class ProfilesSeeder extends Seeder
             [
                 'id' => 1,
                 'user_id' => 2,
-                'username' => 'Primordial666',
+                'username' => 'Primordial123',
                 'birthday' => '2008-12-09',
                 'pfp' => '1730150478.webp',
                 'about_me' => 'I am inevitable',

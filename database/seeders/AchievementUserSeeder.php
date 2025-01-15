@@ -13,7 +13,7 @@ class AchievementUserSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('user_achievements')->insert([
+        DB::table('achievement_user')->insert([
             // User 2
             [
                 'id' => 1,

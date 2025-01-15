@@ -11,7 +11,7 @@ class LeaderboardSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('leaderboard')->insert([
+        DB::table('leaderboards')->insert([
             [
                 'id' => 1,
                 'user_id' => 2,

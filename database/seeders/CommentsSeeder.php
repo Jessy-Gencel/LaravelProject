@@ -16,17 +16,17 @@ class CommentsSeeder extends Seeder
         DB::table('comments')->insert([
             [
                 'id' => 2,
-                'user_id' => 1,
-                'post_id' => 2,
-                'comment' => 'I am really excited to play this game :) !!!',
+                'user_id' => 2,
+                'news_id' => 1,
+                'content' => 'I am really excited to play this game :) !!!',
                 'created_at' => '2024-10-31 15:33:06',
                 'updated_at' => '2024-10-31 15:33:06',
             ],
             [
                 'id' => 4,
-                'user_id' => 1,
-                'post_id' => 2,
-                'comment' => 'Can\'t wait for the next update!',
+                'user_id' => 2,
+                'news_id' => 1,
+                'content' => 'Can\'t wait for the next update!',
                 'created_at' => '2025-01-11 12:40:46',
                 'updated_at' => '2025-01-11 12:40:46',
             ],
