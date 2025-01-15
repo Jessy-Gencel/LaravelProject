@@ -1,6 +1,6 @@
 # Laravel Project: Alien Defense 🚀
 
-![PHP](https://img.shields.io/badge/PHP-%3E%3D8.1-blue) ![MySQL](https://img.shields.io/badge/MySQL-%3E%3D8.0-orange) ![Laravel](https://img.shields.io/badge/Laravel-9.x-red) ![Node.js](https://img.shields.io/badge/Node.js-%3E%3D16.0-green)
+![PHP](https://img.shields.io/badge/PHP-%3E%3D8.1-blue) ![MySQL](https://img.shields.io/badge/MySQL-%3E%3D8.0-orange) ![Laravel](https://img.shields.io/badge/Laravel-11.x-red) ![Node.js](https://img.shields.io/badge/Node.js-%3E%3D16.0-green)
 
 ## Overview
 Welcome to **Alien Defense**, a Laravel-based application featuring:
