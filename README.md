@@ -219,7 +219,7 @@ The conversations can be found here:
     - Publication date  
 
 **Explanation and Code Placement:**  
-- **CRUD operations for news items**: .
+- **News items**: The news items can be found by navigating to news as either a logged in admin,user or just a stranger. Admins can fully manage news items, these features can be found on the news page when logged in as an admin. The blade files responsible for this feature can be found under news in the create and index blade files. The NewsController manages all of the logic attached
 
 ### 4. FAQ Page  
 - **The FAQ page contains a list of questions and answers, grouped by category.**  
