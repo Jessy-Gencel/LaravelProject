@@ -115,7 +115,13 @@ Run the following Artisan command:
 php artisan storage:link
 ```
 
-### 8. Run the Project
+### 8. Seed the database with test data
+To view the website with some test data you can run the command:
+```bash
+php artisan migrate:fresh --seed
+```
+
+### 9. Run the Project
 Start the development servers:
 
 1. Start the Laravel backend:
