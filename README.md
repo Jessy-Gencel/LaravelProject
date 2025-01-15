@@ -194,8 +194,8 @@ The conversations can be found here:
 - **Only admins can manually create a new user (and make them an admin if necessary).**  
 
 **Explanation and Code Placement:**  
-- **Login functionality**: .  
-- **Admin functionality**: .  
+- **Login functionality**: All the basic functionality is present and can be found in the login screen. When logging in the is_admin field will determine whether or not the user receives the admin homepage or not. The templates responsible are the login blade and the home blade page.    
+- **Admin functionality**: The admin receives a dashboard allowing them to allevate users to admin status and can also create users. These functions can be found by clicking on user management when on the admin dashboard. The logic is governed by the AdminController and the blade for adding users can be found under the admin folder under views
 
 ### 2. Profile Page  
 - **Each user has their own public profile page, accessible to everyone, even non-logged-in users.**  
@@ -207,8 +207,7 @@ The conversations can be found here:
     - Short "about me" text  
 
 **Explanation and Code Placement:**  
-- **Profile page**: .  
-- **User's ability to edit data**: .  
+- **Profile page**: The profile pages can be viewed by anyone. This can be done by navigating to the leaderboard section and clicking on a user, the page shown is the profile_view and the logic is managed by the ProfileController. All users can alter their own profiles by clicking on their profile in the top right when logged in and changing one of the fields with the pencil icon. This logic is managed by the profile view and is also managed by the ProfileController.
 
 ### 3. Latest News  
 - **Admins can add, edit, and delete news items.**  
