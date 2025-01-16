@@ -256,55 +256,35 @@ The conversations can be found here:
 ## Technical Requirements
 
 ### Views  
-- **Use at least two layouts.**  
-- **Use components where logical.**  
-- **Use techniques covered in the course and exercises.**
-
-**Explanation and Code Placement:**  
-- **Layouts and components**:.
-
-### Control Structures  
-- **XSS protection**  
-- **CSRF protection**  
-- **Client-side validation**
-
-**Explanation and Code Placement:**  
-- **Security features**: .
-
+- **Use at least two layouts. -> Layout folder has layouts for header and footer pages and the game window. It also features a layout for banned users**  
+- **Use components where logical. -> Editable fields, pfp uploads and other profile page structures are reused throughout the profile page **  
+- **Necessary control structures -> @CSRF is used on forms, middleware and Laravel features are used to counter XSS while client side validation is used on users profile making.**
+  
 ### Routes  
-- **All routes use controller methods.**  
-- **All routes use necessary middleware.**  
-- **Group your routes where possible.**
-
-**Explanation and Code Placement:**  
-- **Routes**: .
+- **All routes use controller methods. -> Web route file always use Controller methods**  
+- **All routes use necessary middleware. -> Routes only allowed to be viewed by certain users have the necessary auth middleware and admins have a custom admin middleware**  
+- **Group your routes where possible. -> The routes are grouped where possible**
 
 ### Controllers  
-- **Use controllers to split your logic and CRUD operations.**  
+- **Use controllers to split your logic and CRUD operations. -> All functionality is linked to Controllers which each have clearly defined responsibilities**  
 
-**Explanation and Code Placement:**  
-- **Controller structure**: .
 
 ### Models  
-- **Use Eloquent models for each entity.**  
+- **Use Eloquent models for each entity. -> each entity has a corresponding model which can be found in the middleware list.**  
 - **Define necessary relationships:**
-    - At least one **one-to-many**  
-    - At least one **many-to-many**  
+    - At least one **one-to-many -> A user can have be the author of multiple faqs. This can be found on line 38 of the user model**  
+    - At least one **many-to-many -> A user can have multiple achievements and an achievement can belong to multiple users. This can be found on line 55 of the user model**  
 
-**Explanation and Code Placement:**  
-- **Models**: .
 
 ### Database  
-- **Ensure the database is working properly.**  
-- **Ensure it contains the necessary base data.**
+- **Ensure the database is working properly. -> Database has correct migrations**  
+- **Ensure it contains the necessary base data. -> Database has correct seeders**
 
-**Explanation and Code Placement:**  
-- **Database setup**: .
 
 ### Authentication  
 - **Standard functionalities:**
-    - Log in/out  
-    - 'Remember me'  
+    - Log in/out -> can be found on the login page and is managed in the authController from line 18-39 and 90-97
+    - 'Remember me' ->  Can be found in the authController
     - Register  
     - Password reset option  
 
