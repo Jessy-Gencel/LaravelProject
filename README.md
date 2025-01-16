@@ -284,12 +284,10 @@ The conversations can be found here:
 ### Authentication  
 - **Standard functionalities:**
     - Log in/out -> can be found on the login page and is managed in the authController from line 18-39 and 90-97
-    - 'Remember me' ->  Can be found in the authController
-    - Register  
-    - Password reset option  
+    - 'Remember me' ->  Can be found in the AuthController from line 30-34 
+    - Register  -> Can be found in the AuthController from line 46-89 
+    - Password reset option -> Can be found in the AuthController from line 120-174
 
-**Explanation and Code Placement:**  
-- **Authentication**: .
 
 
 
