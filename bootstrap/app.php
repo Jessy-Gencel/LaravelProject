@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Middleware\CheckGameOrigin;
 use App\Http\Middleware\CheckIfBlacklisted;
+use App\Http\Middleware\CheckAdmin;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -13,11 +15,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->group('admin', [
+            CheckAdmin::class
+        ]);
         $middleware->web(append: [
             CheckIfBlacklisted::class
         ]);
         $middleware->api(append: [
-            CheckIfBlacklisted::class
+            CheckIfBlacklisted::class,
+            CheckGameOrigin::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

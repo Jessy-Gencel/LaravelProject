@@ -5,6 +5,7 @@ async function loadTowers() {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
+                'X-referer': window.location.href,
             },
         });
 

@@ -15,7 +15,6 @@ use App\Http\Controllers\AdminController;
 // Home routes
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home');
-    Route::post('/', 'uploadImage')->name('upload.image');
 });
 
 // Auth routes
@@ -25,13 +24,15 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');
     Route::post('/logout', 'logout')->name('logout');
-    Route::get('/blacklisted', 'showBlacklisted')->name('blacklisted');
     Route::get('/password/forgotPassword', 'showForgotPasswordForm')->name('password.forgotPassword');
     Route::post('/password/sendResetCode', 'sendResetCode')->name('password.resetCode');
     Route::get('password/validateResetPage' , 'getValidateResetPage')->name('password.validateResetPage');
     Route::post('/password/validateResetCode', 'validateResetCode')->name('password.validateResetCode');
     Route::get('/password/resetPassword', 'showResetPasswordForm')->name('password.reset');
     Route::post('/password/performReset', 'performPasswordReset')->name('password.update');
+    Route::middleware('admin')->group(function () {
+        Route::get('/blacklisted', 'showBlacklisted')->name('blacklisted');
+    });
 });
 
 // Profile routes 
@@ -48,21 +49,17 @@ Route::controller(ProfileController::class)->prefix('profile')->name('profile.')
 // FAQ routes
 Route::prefix('faq')->name('faq.')->controller(FaqController::class)->group(function () {
     Route::get('/', 'index')->name('main');
-    Route::get('/addQuestion', 'showAddQuestionForm')->name('addQuestion');
-    Route::post('/addQuestion/store', 'storeQuestion')->name('saveFAQ');
     Route::middleware('auth')->group(function () {
-        Route::delete('/delete/{id}', 'deleteFaq')->name('delete');
+        Route::get('/addQuestion', 'showAddQuestionForm')->name('addQuestion');
+        Route::post('/addQuestion/store', 'storeQuestion')->name('saveFAQ');
+    });
+    Route::middleware('admin')->group(function () {
+        Route::post('/approve/{id}', 'approveFaq')->name('approve');
         Route::post('/update/{id}', 'updateFaq')->name('update');
         Route::post('/update/categories/category', 'updateCategory')->name('updateCategory');
+        Route::delete('/delete/{id}', 'deleteFaq')->name('delete');
         Route::get('/details/{id}', 'showDetailsFaq')->name('details');
-        Route::post('/approve/{id}', 'approveFaq')->name('approve');
     });
-});
-
-// File upload routes
-Route::controller(FileUploadController::class)->prefix('upload')->name('upload.')->group(function () {
-    Route::get('/', 'showForm')->name('form');
-    Route::post('/file', 'uploadFile')->name('file');
 });
 
 // Contact routes
@@ -75,29 +72,31 @@ Route::controller(ContactController::class)->prefix('contact')->name('contact.')
 Route::controller(NewsController::class)->prefix('news')->name('news.')->group(function () {
     Route::get('/', 'index')->name('index');
     Route::middleware('auth')->group(function () {
+        Route::post('/comments', 'storeComment')->name('comments.store');
+    });
+    Route::middleware('admin')->group(function () {
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
         Route::post('/update', 'update')->name('update');
         Route::delete('/{id}', 'destroy')->name('destroy');
-        Route::post('/comments', 'storeComment')->name('comments.store');
         Route::delete('/comments/destroy/{id}', 'destroyComment')->name('comments.destroy');
         Route::post('/comments/update/{id}', 'updateComment')->name('comments.update');
     });
 });
 
 // Game routes
-Route::prefix('game')->name('game.')->group(function () {
-    Route::get('/', [GameController::class, 'index'])->name('index');
-    Route::get('/gameOverScreen', [GameController::class,'gameOverScreen']) -> name('gameOverScreen')->middleware('auth');
-    Route::post('/saveScore', [GameController::class,'saveScore']) -> name('saveScore')->middleware('auth');
+Route::controller(GameController::class)->prefix('game')->name('game.')->middleware('auth')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/gameOverScreen','gameOverScreen') -> name('gameOverScreen');
+    Route::post('/saveScore', 'saveScore') -> name('saveScore');
 });
 
 // Leaderboard routes
 Route::controller(LeaderboardController::class)->prefix('leaderboard')->name('leaderboard.')->group(function () {
     Route::get('/', 'index')->name('index');
-    Route::post('/update', 'updateHighscore')->name('update');
+    Route::post('/update', 'updateHighscore')->name('update')->middleware('auth');
 });
-Route::controller(AdminController::class)->prefix('admin')->name('admin.')->group(function () {
+Route::controller(AdminController::class)->prefix('admin')->name('admin.')->middleware("admin")->group(function () {
     Route::get('/manageUsers', 'getUserManagement')->name('userManagement');
     Route::post('/blacklist/{userId}', 'blacklistUser')->name('blacklist.toggle');
     Route::post('/admin/{userId}', 'adminUser')->name('admin.toggle');
