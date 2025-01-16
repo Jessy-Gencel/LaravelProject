@@ -20,7 +20,7 @@ class MyGame extends Phaser.Scene {
         this.towers = [];
         this.enemies = [];
         this.score = 0;
-        this.currency = 300;
+        this.currency = 150;
         this.placedTowers = {};
         this.enemies = {};
         this.enemySpawners = [];

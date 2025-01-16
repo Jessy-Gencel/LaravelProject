@@ -102,7 +102,7 @@ class AchievementUserSeeder extends Seeder
             [
                 'id' => 11,
                 'user_id' => 4,
-                'achievement_id' => 5, // Alien Bastion
+                'achievement_id' => 5, // Juggernaut slayer
                 'awarded_at' => '2024-11-20 18:40:00',
                 'created_at' => '2024-11-20 18:40:00',
                 'updated_at' => '2024-11-20 18:40:00',

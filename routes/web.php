@@ -3,7 +3,6 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\ContactController;
@@ -89,6 +88,7 @@ Route::controller(GameController::class)->prefix('game')->name('game.')->middlew
     Route::get('/', 'index')->name('index');
     Route::get('/gameOverScreen','gameOverScreen') -> name('gameOverScreen');
     Route::post('/saveScore', 'saveScore') -> name('saveScore');
+    Route::get('/gameWon', 'gameWon') -> name('gameWon');
 });
 
 // Leaderboard routes

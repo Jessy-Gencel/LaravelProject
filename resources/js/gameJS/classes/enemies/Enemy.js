@@ -1,5 +1,5 @@
 import { Projectile } from '../Projectile.js';
-import { gameOverScreen,setGameOverRoute } from '../../gameOverScreen.js';
+import { gameOverScreen,setGameOverRoute,gameWon } from '../../gameOverScreen.js';
 class Enemy extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, row, enemyConfig) {
         super(scene, x, y,enemyConfig.name);
@@ -55,6 +55,10 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     baseDie(addScore = true) {
         if (addScore) {
             this.scene.events.emit('addScore', this.score);
+        }
+        if (this.name == 'juggernaut'){
+            setGameOverRoute(this.scene.score);
+            gameWon();
         }
         for (const key in this.actions) {
             if (this.actions.hasOwnProperty(key)) {

@@ -1,5 +1,5 @@
 class Projectile extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, projectile_sprite, projectile_speed, damage, range = null, target = null, direction = { x: 1, y: 0 }) {
+    constructor(scene, x, y, projectile_sprite, projectile_speed, damage, range = null, target = null, direction = { x: 1, y: 0 },scale) {
         super(scene, x, y, projectile_sprite);
         this.speed = projectile_speed;
         this.damage = damage;
@@ -9,6 +9,7 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
         this.startX = x;
         this.startY = y;
         this.distanceTraveled = 0;
+        this.setScale(scale);
     }
 
     update() {

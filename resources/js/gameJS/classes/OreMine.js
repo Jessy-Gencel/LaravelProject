@@ -93,6 +93,7 @@ class OreMine {
         const upgradeCost = this.getUpgradeCost();
         if (this.checkIfCanUpgrade()) {
             this.scene.currency -= upgradeCost;
+            this.cost += 10;
             this.level += 1;
             this.income += 5;
             this.mineralSprite.destroy();
@@ -135,7 +136,12 @@ class OreMine {
     }
 
     getUpgradeCost() {
-        return this.cost * this.level * 1.5; 
+        if (this.level === 1) {
+            return 50;
+        }
+        else{
+            return Math.round(this.cost * this.level * 0.75 / 10) * 10;
+        }
     }
     maxLevelHandling(){
         this.upgradeButton.destroy();

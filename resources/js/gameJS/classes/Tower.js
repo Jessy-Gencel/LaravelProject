@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
 import { Projectile } from './Projectile';
 class Tower extends Phaser.Physics.Arcade.Sprite  {
-    constructor(scene, x, y, sprite, hitpoints,attackSpeed, damage, range, rotation_angle,projectileSprite,projectileSpeed,row,col) {
+    constructor(scene, x, y, sprite, hitpoints,attackSpeed, damage, range, rotation_angle,projectileSprite,projectileSpeed,row,col,scale_projectiles = 1) {
+        console.log(attackSpeed)
         super(scene, x, y, sprite);
         this.remainingHitpoints = hitpoints;
         this.hitpoints = hitpoints;
@@ -15,6 +16,7 @@ class Tower extends Phaser.Physics.Arcade.Sprite  {
         this.actions = [];
         this.row = row;
         this.col = col;
+        this.scale_projectiles = scale_projectiles;
     }
 
     findTarget(enemies) {
@@ -41,14 +43,15 @@ class Tower extends Phaser.Physics.Arcade.Sprite  {
                 this.damage,
                 this.range,
                 this.target,
-                { x: 1, y: 0 } 
+                { x: 1, y: 0 }, 
+                this.scale_projectiles
             );
             this.scene.projectileManager.addProjectile(projectile);
         }
     }
     startShooting() {
         this.actions.push(this.scene.time.addEvent({
-            delay: 3000, 
+            delay: this.attackSpeed, 
             callback: () => {
                 this.shoot();
                 this.animateShooting();

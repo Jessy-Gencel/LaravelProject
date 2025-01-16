@@ -24,6 +24,11 @@ function setupUIHandlers(game) {
             const col = Math.floor((pointer.x - gridConfig.startOffsetx) / gridConfig.squareWidth);
             const row = Math.floor((pointer.y - gridConfig.startOffsety) / gridConfig.squareHeight);
             if (col >= 0 && col < gridConfig.numCols && row >= 0 && row < gridConfig.numRows) {
+                let projectileScale = 1;
+                if (game.selectedTower.name === 'Infernal Tower' || game.selectedTower.name === 'Gatling Tower') {
+                    console.log("this ran")
+                    projectileScale = 0.68;
+                }
                 const x = gridConfig.startOffsetx + col * gridConfig.squareWidth + gridConfig.squareWidth / 2;
                 const y = gridConfig.startOffsety + row * gridConfig.squareHeight + gridConfig.squareHeight / 2;
                 if (!game.gridCells[row][col].occupied && game.currency >= game.selectedTower.price) {
@@ -41,6 +46,7 @@ function setupUIHandlers(game) {
                         game.selectedTower.projectileSpeed,
                         row,
                         col,
+                        projectileScale
                     );
                     game.towerManager.addTower(newTower);
                     game.placedTowers[row][col] = newTower;

@@ -4,4 +4,7 @@
     <button id="authRouteTrigger" style="display: none;" onclick="window.location.href='{{ route('game.gameOverScreen') }}'">
         Game Over Screen
     </button>
+    <button id="gameWonTrigger" style="display: none;" onclick="window.location.href='{{ route('game.gameWon') }}'">
+        Game Won Screen
+    </button>
 @endsection

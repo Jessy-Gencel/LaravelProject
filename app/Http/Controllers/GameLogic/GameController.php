@@ -32,10 +32,14 @@ class GameController extends Controller
     {
         return view('game/gameOverScreen');
     }
+    public function gameWon()
+    {
+        return view('game/gameWon');
+    }
     public function saveScore()
     {
         $score = (int) request('score');
-        if ($score > 15000) {
+        if ($score > 250000) {
             return response()->json(['error' => "Ah Look here, someone thought using f12 would be a good idea. Nice try! But you're banned!"]);	
         }
         $user = auth()->user();
