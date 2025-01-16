@@ -234,7 +234,7 @@ The conversations can be found here:
 - **When the contact form is submitted, the admin receives an email with the form's content.**  
 
 **Explanation and Code Placement:**  
-- **Contact form handling**: .
+- **Contact form handling**: The contact form page is accessible to everyone and sends an email to the configured admin. The contact form page can be found in contact blade and the logic is managed by the ContactController. 
 
 ### 6. Extra Features (Optional but beneficial for higher grades)  
 - **Admins can view all submitted contact forms in an admin panel and respond to messages.**  
@@ -244,7 +244,8 @@ The conversations can be found here:
 - *Other project-specific features.*
 
 **Explanation and Code Placement:**  
-- **Additional features**: .
+- **Contact panel**: The admin has a panel which shows all contact requests and allows for answering of the requests, this then automatically sends an email with the answer to the provided email adress of the user. The page can be found by clicking on the contact section of the navbar while logged in as an admin. The page is kept under the admin folder called contactDashboard and the logic is managed by the AdminController
+- 
 
 ## Technical Requirements
 
