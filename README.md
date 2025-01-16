@@ -239,13 +239,16 @@ The conversations can be found here:
 ### 6. Extra Features (Optional but beneficial for higher grades)  
 - **Admins can view all submitted contact forms in an admin panel and respond to messages.**  
 - **Users can leave comments on news items.**  
-- **Users can send messages to another user's profile or send a private message.**  
+- **Users can leave comments on another user's profile.**  
 - **Users can add questions to the FAQ.**  
 - *Other project-specific features.*
 
 **Explanation and Code Placement:**  
 - **Contact panel**: The admin has a panel which shows all contact requests and allows for answering of the requests, this then automatically sends an email with the answer to the provided email adress of the user. The page can be found by clicking on the contact section of the navbar while logged in as an admin. The page is kept under the admin folder called contactDashboard and the logic is managed by the AdminController
-- 
+- **Comments on news**: Users can leave comments on news articles. A logged in user will see the option to leave a comment on a news instance. This is managed by the newsController, and has the functionality managed on the news index page.
+- **User Comments on profiles**: Users can leave comments on another user's profile. This can be found on the profile_view page which can be accessed by entering the leaderboard page and then clicking on a user. The comments are managed by the profileController.
+- **Adding questions to FAQ**: As mentioned already, users can ask questions via the Faq page which will then be sent to an admin for approval and answering. This function is managed by the FAQ controller and can be accessed on the FAQ page.
+- **Blacklisting users**: Admins have the option to blacklist users. Once that the blacklist
 
 ## Technical Requirements
 
