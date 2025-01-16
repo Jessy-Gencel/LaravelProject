@@ -248,7 +248,9 @@ The conversations can be found here:
 - **Comments on news**: Users can leave comments on news articles. A logged in user will see the option to leave a comment on a news instance. This is managed by the newsController, and has the functionality managed on the news index page.
 - **User Comments on profiles**: Users can leave comments on another user's profile. This can be found on the profile_view page which can be accessed by entering the leaderboard page and then clicking on a user. The comments are managed by the profileController.
 - **Adding questions to FAQ**: As mentioned already, users can ask questions via the Faq page which will then be sent to an admin for approval and answering. This function is managed by the FAQ controller and can be accessed on the FAQ page.
-- **Blacklisting users**: Admins have the option to blacklist users. Once that the blacklist
+- **Blacklisting users**: Admins have the option to blacklist users. Once that the blacklist button is pressed the user is unable to access the website. This functionality can be found on the admin dashboard and is managed by the admin controller. To ensure that this functionality is enforced A custom middleware was made to check this field on all users before any routing. It can be found in the bootstap folder in app.php.
+- **Leaderboards**: A custom feature showing the scores of all users and their ranking based on how many enemies they managed to kill in the game. The leaderboard file can be found under the folder leaderboard and is managed by the LeaderboardController. Admin users additionally get the option to ban scores because of signs of tampering, this then also automatically blacklists the user.
+- **Badges**: A custom feature working similarily to achievements in Steam. Upon completing certain actions the user will be awarded a badge which they can see on their profile or when viewing another users profile.
 
 ## Technical Requirements
 
