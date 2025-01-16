@@ -227,7 +227,7 @@ The conversations can be found here:
 - **Every visitor can see the FAQ.**  
 
 **Explanation and Code Placement:**  
-- **FAQ functionality**: .
+- **FAQ functionality**: The FAQ's can be found on the FAQ page. They are accessible to all visitors of the site. The FAQ's are grouped per category. FAQ's can be added by both logged in users and admins, a user first requires the admin to validate the FAQ for it to be visible to the public. The Views can be found in the FAQ folder and the FaqController handles the logic of the Faq's
 
 ### 5. Contact Page  
 - **Every visitor can fill out a contact form.**  
