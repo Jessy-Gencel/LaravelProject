@@ -101,7 +101,7 @@ npm install
 ```
 
 ### 6. Add Necessary Images
-Download the image folders from the provided [Google Drive link](https://drive.google.com/drive/folders/1yXtwHPg8jSp3WjF9MovqwiqQ6VlkQhaq?usp=sharing). Place the folders as follows:
+Download the image folders from the provided [Google Drive link](https://drive.google.com/drive/folders/1yXtwHPg8jSp3WjF9MovqwiqQ6VlkQhaq?usp=sharing).For now only the professor who assigned us this assignement has access to the folder (on their EHB email address). Place the folders as follows:
 
 - **Under `public/`:**
   - Place the folder named `storage`.
