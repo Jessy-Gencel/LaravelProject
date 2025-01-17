@@ -101,13 +101,10 @@ npm install
 ```
 
 ### 6. Add Necessary Images
-Download the image folders from the provided [Google Drive link](https://drive.google.com/drive/folders/1yXtwHPg8jSp3WjF9MovqwiqQ6VlkQhaq?usp=sharing).For now only the professor who assigned us this assignement has access to the folder (on their EHB email address). Place the folders as follows:
+Download the image folders from the provided [Google Drive link](https://drive.google.com/drive/folders/1yXtwHPg8jSp3WjF9MovqwiqQ6VlkQhaq?usp=sharing).For now only the professor who assigned us this assignement has access to the folder (on their EHB email address). Place the folder as follows:
 
-- **Under `public/`:**
-  - Place the folder named `storage`.
-
-- **Under `storage/app/`:**
-  - Copy the same folder, rename it to `public`, and place it here.
+- **Under `storage`:**
+  - Make a folder called app and copy the storage folder, rename it to `public`, and place it here.
 
 ### 7. Link Storage
 Run the following Artisan command:
