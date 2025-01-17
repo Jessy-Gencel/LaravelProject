@@ -15,7 +15,7 @@ class ProfilesSeeder extends Seeder
     {
         DB::table('profiles')->insert([
             [
-                'id' => 1,
+                'id' => 2,
                 'user_id' => 2,
                 'username' => 'Primordial123',
                 'birthday' => '2008-12-09',
@@ -25,7 +25,7 @@ class ProfilesSeeder extends Seeder
                 'updated_at' => '2024-10-28 21:21:18',
             ],
             [
-                'id' => 2,
+                'id' => 3,
                 'user_id' => 3,
                 'username' => 'Kuro',
                 'birthday' => '2005-03-01',
@@ -35,7 +35,7 @@ class ProfilesSeeder extends Seeder
                 'updated_at' => '2024-11-20 16:46:34',
             ],
             [
-                'id' => 3,
+                'id' => 4,
                 'user_id' => 4,
                 'username' => 'Garry',
                 'birthday' => '1993-05-12',
@@ -45,7 +45,7 @@ class ProfilesSeeder extends Seeder
                 'updated_at' => '2024-11-20 16:51:39',
             ],
             [
-                'id' => 4,
+                'id' => 5,
                 'user_id' => 5,
                 'username' => 'admin',
                 'birthday' => '2002-08-14',
@@ -55,7 +55,7 @@ class ProfilesSeeder extends Seeder
                 'updated_at' => '2024-12-31 11:36:04',
             ],
             [
-                'id' => 9,
+                'id' => 8,
                 'user_id' => 8,
                 'username' => 'Frederick',
                 'birthday' => '2000-12-08',

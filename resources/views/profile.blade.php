@@ -33,7 +33,7 @@
     
     <div class="mt-4">
         <label class="block text-gray-700 font-medium mb-1">Password</label>
-        <a href="#" class="inline-block mt-2">
+        <a href="{{ route('password.forgotPassword') }}" class="inline-block mt-2">
             <button type="button" class="bg-red-500 text-white py-2 px-4 rounded">Reset Password</button>
         </a>
     </div>
