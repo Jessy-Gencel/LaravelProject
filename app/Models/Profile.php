@@ -12,4 +12,9 @@ class Profile extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function profileComments()
+    {
+        return $this->hasMany(ProfileComment::class, 'profile_id');
+    }
+    
 }

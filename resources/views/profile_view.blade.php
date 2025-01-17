@@ -47,7 +47,7 @@
         <h3 class="text-xl font-bold mb-4">Comments</h3>
 
         <!-- Add Comment Form -->
-        <form action="{{ route('profile.postComment', $user->id) }}" method="POST" class="mb-6">
+        <form action="{{ route('profile.postComment', $user->profile->id) }}" method="POST" class="mb-6">
             @csrf
             <textarea 
                 name="comment" 
@@ -60,7 +60,7 @@
         </form>
 
         <!-- Comments List -->
-        @foreach($user->profileComments as $comment)
+        @foreach($user->profile->profileComments as $comment)
         <div class="bg-gray-100 p-4 rounded shadow mb-4">
             <div class="flex justify-between items-center">
                 <p class="font-bold text-gray-800">{{ $comment->author->profile->username }}</p>

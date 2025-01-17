@@ -33,6 +33,6 @@ class ProfileComment extends Model
      */
     public function profile()
     {
-        return $this->belongsTo(User::class, 'profile_id');
+        return $this->belongsTo(Profile::class, 'profile_id');
     }
 }
